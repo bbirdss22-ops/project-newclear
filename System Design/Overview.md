@@ -39,7 +39,7 @@ graph TB
 
 | Component | Technology | Hosting |
 |-----------|-----------|---------|
-| Frontend | Next.js | Vercel Free Tier |
+| Frontend | Next.js + **[[Astryx Design System]]** | Vercel Free Tier |
 | Backend | NestJS | Render Free Tier |
 | Database | PostgreSQL | Neon Free Tier |
 | Messaging | Line Messaging API | Free |
@@ -62,10 +62,13 @@ graph TB
 - Webhook → NestJS
 - Actions: postback (สั่งซื้อสินค้า), uri (สมัครสมาชิก)
 
-### 2. Next.js (Frontend)
+### 2. Next.js (Frontend) — powered by [[Astryx Design System]]
 - `/register` — ฟอร์มสมัครสมาชิก (public)
 - `/login` — สำหรับ dashboard users
 - `/dashboard` — รายชื่อ + รายละเอียดลูกค้า (ต้อง login)
+- **UI Components:** Astryx 160+ React components (table, form, badge, modal, button)
+- **Themes:** ปรับ brand colors ได้ผ่าน Astryx theme system
+- **Dark mode:** Built-in
 
 ### 3. NestJS (Backend)
 - `LineModule` — รับ webhook, จัดการ Rich Menu

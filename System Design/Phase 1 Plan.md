@@ -56,9 +56,11 @@ Modules ที่ต้องสร้าง:
 - สร้าง Rich Menu via API (POST JSON → upload image → set default)
 - Set webhook URL → `https://your-app.onrender.com/api/line/webhook`
 
-### 🔹 Step 4: Next.js Frontend
+### 🔹 Step 4: Next.js Frontend — powered by [[Astryx Design System]]
 ```bash
 npx create-next-app@latest project-newclear-web
+cd project-newclear-web
+npm install @atmeta/astryx
 ```
 
 | Route | Description |
@@ -69,7 +71,19 @@ npx create-next-app@latest project-newclear-web
 | `/dashboard` | Table list customers + search — ต้อง JWT |
 | `/dashboard/[id]` | Customer detail page |
 
-ดีไซน์ใช้ **Tailwind CSS** + **shadcn/ui** (free component library)
+**UI Stack:**
+- [[Astryx Design System]] — 160+ components (table, form, badge, button, modal)
+- **Astryx Themes** — ปรับ brand colors ได้ทันที
+- **Dark mode** — built-in
+- Tailwind CSS + Astryx ทำงานเสริมกันได้
+
+**Components ที่ใช้:**
+| หน้า | Astryx Component |
+|------|------------------|
+| Register | Form, Input, Button, Card |
+| Dashboard | Table, Badge, Search, Select, Pagination |
+| Detail | Card, Badge, Modal, Button |
+| Login | Form, Input, Button |
 
 ### 🔹 Step 5: Connect Components
 - Form submit → `POST /api/customers`
