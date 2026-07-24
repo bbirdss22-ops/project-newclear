@@ -1,0 +1,25 @@
+{
+  "name": "project-newclear",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbirdss22-ops/project-newclear.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/bbirdss22-ops/project-newclear/issues"
+  },
+  "homepage": "https://github.com/bbirdss22-ops/project-newclear#readme",
+  "dependencies": {
+    "@prisma/client": "^7.9.0",
+    "prisma": "^7.9.0"
+  }
+}
