@@ -64,7 +64,11 @@ created: 2026-07-21
 - [x] **T18** 🔴 `CustomerModule` + `CustomerController` → `/api/customers`
 - [x] **T19** 🔴 `POST /api/customers` — create customer (public)
 - [x] **T20** 🔴 `GET /api/customers` — list customers (protected, paginated)
+  - [x] **R1** 🟡 ปรับ pagination response เป็น standard: `{ data, page, pageSize, totalItems, totalPages, _links }`
+  - [x] **R2** 🟡 เปลี่ยน query `limit` → `pageSize` (backward compat รองรับ limit ด้วย)
+  - [x] **R3** 🟡 สร้าง `PaginatedResponse<T>` interface ใน `common/interfaces/`
 - [x] **T21** 🟡 `GET /api/customers/search?q=xxx` — search (ชื่อ/เบอร์/email)
+  - [x] **R4** 🟡 ใช้ pagination format เดียวกันกับ T20
 - [x] **T22** 🟡 `GET /api/customers/:id` — customer detail
 - [x] **T23** 🟡 `GET /api/customers/line/:lineUserId` — find by Line userId
 - [x] **T24** 🟢 `PATCH /api/customers/:id` — update customer info
