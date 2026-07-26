@@ -152,7 +152,7 @@ Content-Type: application/json
 ### List Customers (Protected)
 
 ```
-GET /api/customers?page=1&limit=20
+GET /api/customers?page=1&pageSize=20
 ```
 
 **Auth:** ✅ JWT Bearer token (admin/superadmin)
@@ -161,7 +161,10 @@ GET /api/customers?page=1&limit=20
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `page` | number | 1 | หน้าปัจจุบัน |
-| `limit` | number | 20 | จำนวนต่อหน้า |
+| `pageSize` | number | 20 | จำนวนต่อหน้า (แนะนำให้ใช้) |
+| `limit` | number | 20 | **[Deprecated]** เดิมใช้ 'limit' — ยังใช้ได้แต่แนะนำ pageSize |
+
+> `pageSize` > `limit` > default 20 (backward compatible)
 
 **Response 200:**
 ```json
@@ -177,9 +180,15 @@ GET /api/customers?page=1&limit=20
       "createdAt": "2026-07-26T..."
     }
   ],
-  "total": 1,
   "page": 1,
-  "limit": 20
+  "pageSize": 20,
+  "totalItems": 100,
+  "totalPages": 5,
+  "_links": {
+    "self": "/api/customers?page=1&pageSize=20",
+    "next": "/api/customers?page=2&pageSize=20",
+    "prev": null
+  }
 }
 ```
 
@@ -206,15 +215,22 @@ GET /api/customers/search?q=สมชาย
 |-------|------|---------|-------------|
 | `q` | string | "" | คำค้นหา (firstName, lastName, phone, email) |
 | `page` | number | 1 | |
-| `limit` | number | 20 | |
+| `pageSize` | number | 20 | จำนวนต่อหน้า |
+| `limit` | number | 20 | **[Deprecated]** |
 
 **Response 200:**
 ```json
 {
   "data": [...],
-  "total": 1,
   "page": 1,
-  "limit": 20
+  "pageSize": 20,
+  "totalItems": 1,
+  "totalPages": 1,
+  "_links": {
+    "self": "/api/customers/search?q=สมชาย&page=1&pageSize=20",
+    "next": null,
+    "prev": null
+  }
 }
 ```
 
