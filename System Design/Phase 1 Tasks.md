@@ -25,21 +25,21 @@ created: 2026-07-21
 > Dependencies: —
 
 ### S1.1 — Neon Setup
-- [ ] **T1** 🔴 สมัคร [Neon](https://neon.tech) account
-- [ ] **T2** 🔴 สร้าง Neon project → จด connection string
+- [x] **T1** 🔴 สมัคร [Neon](https://neon.tech) account
+- [x] **T2** 🔴 สร้าง Neon project → จด connection string
 
 ### S1.2 — Database Schema
-- [ ] **T3** 🔴 เขียน DDL: `users` table (id, username, password, role)
-- [ ] **T4** 🔴 เขียน DDL: `customers` table (รวม MLM fields)
-- [ ] **T5** 🟡 เขียน DDL: `line_events` table
-- [ ] **T6** 🟡 เขียน indexes (line_user_id, referrer_id, tree_path)
-- [ ] **T7** 🔴 Run migrations ผ่าน Neon console หรือ psql
-- [ ] **T8** 🟢 Seed ข้อมูล: admin user 5 คน + dummy customers 2-3 คน (สำหรับ dev)
+- [x] **T3** 🔴 เขียน DDL: `users` table (id, username, password, role)
+- [x] **T4** 🔴 เขียน DDL: `customers` table (รวม MLM fields)
+- [x] **T5** 🟡 เขียน DDL: `line_events` table
+- [x] **T6** 🟡 เขียน indexes (line_user_id, referrer_id, tree_path)
+- [x] **T7** 🔴 Run migrations ผ่าน Neon console หรือ psql
+- [x] **T8** 🟢 Seed ข้อมูล: admin user 5 คน + dummy customers 2-3 คน (สำหรับ dev)
 
 ### ✅ Done Criteria
-- [ ] psql เชื่อมต่อ Neon สำเร็จ
-- [ ] `\dt` เห็น 3 tables
-- [ ] INSERT/SELECT ทดสอบผ่าน
+- [x] psql เชื่อมต่อ Neon สำเร็จ
+- [x] `\dt` เห็น 3 tables
+- [x] INSERT/SELECT ทดสอบผ่าน
 
 ---
 
@@ -48,41 +48,41 @@ created: 2026-07-21
 > Dependencies: S1 ✅ (ต้องมี DB ก่อน)
 
 ### S2.1 — Project Init
-- [ ] **T9** 🔴 `nest new project-newclear-api`
-- [ ] **T10** 🟡 ติดตั้ง `@nestjs/config` — env variables (.env)
-- [ ] **T11** 🔴 ติดตั้ง Prisma ORM + `npx prisma init`
-- [ ] **T12** 🔴 เขียน Prisma schema (users, customers, line_events)
-- [ ] **T13** 🔴 `npx prisma generate` + `npx prisma db push`
+- [x] **T9** 🔴 `nest new project-newclear-api`
+- [x] **T10** 🟡 ติดตั้ง `@nestjs/config` — env variables (.env)
+- [x] **T11** 🔴 ติดตั้ง Prisma ORM + `npx prisma init`
+- [x] **T12** 🔴 เขียน Prisma schema (users, customers, line_events)
+- [x] **T13** 🔴 `npx prisma generate` + `npx prisma db push`
 
 ### S2.2 — Auth Module
-- [ ] **T14** 🔴 `AuthModule` + `AuthController` → `/api/auth/login`
-- [ ] **T15** 🔴 `AuthService` — validate credentials + return JWT
-- [ ] **T16** 🔴 `JwtAuthGuard` — protect protected routes
-- [ ] **T17** 🟡 `RolesGuard` — เผื่อมี role ต่างกัน
+- [x] **T14** 🔴 `AuthModule` + `AuthController` → `/api/auth/login`
+- [x] **T15** 🔴 `AuthService` — validate credentials + return JWT
+- [x] **T16** 🔴 `JwtAuthGuard` — protect protected routes
+- [x] **T17** 🟡 `RolesGuard` — เผื่อมี role ต่างกัน
 
 ### S2.3 — Customer Module
-- [ ] **T18** 🔴 `CustomerModule` + `CustomerController` → `/api/customers`
-- [ ] **T19** 🔴 `POST /api/customers` — create customer (public)
-- [ ] **T20** 🔴 `GET /api/customers` — list customers (protected, paginated)
-- [ ] **T21** 🟡 `GET /api/customers/search?q=xxx` — search (ชื่อ/เบอร์/email)
-- [ ] **T22** 🟡 `GET /api/customers/:id` — customer detail
-- [ ] **T23** 🟡 `GET /api/customers/line/:lineUserId` — find by Line userId
-- [ ] **T24** 🟢 `PATCH /api/customers/:id` — update customer info
+- [x] **T18** 🔴 `CustomerModule` + `CustomerController` → `/api/customers`
+- [x] **T19** 🔴 `POST /api/customers` — create customer (public)
+- [x] **T20** 🔴 `GET /api/customers` — list customers (protected, paginated)
+- [x] **T21** 🟡 `GET /api/customers/search?q=xxx` — search (ชื่อ/เบอร์/email)
+- [x] **T22** 🟡 `GET /api/customers/:id` — customer detail
+- [x] **T23** 🟡 `GET /api/customers/line/:lineUserId` — find by Line userId
+- [x] **T24** 🟢 `PATCH /api/customers/:id` — update customer info
 
 ### S2.4 — Line Module
-- [ ] **T25** 🔴 ติดตั้ง `@line/bot-sdk`
-- [ ] **T26** 🔴 `LineModule` + webhook endpoint `POST /api/line/webhook`
-- [ ] **T27** 🔴 verify Line signature middleware
-- [ ] **T28** 🔴 Handle `postback` event — สั่งซื้อสินค้า → reply message
-- [ ] **T29** 🟡 Handle `follow` event — welcome message เมื่อ add friend
-- [ ] **T30** 🟡 `LineService.pushMessage` — push message กลับหา user
+- [x] **T25** 🔴 ติดตั้ง `@line/bot-sdk`
+- [x] **T26** 🔴 `LineModule` + webhook endpoint `POST /api/line/webhook`
+- [x] **T27** 🔴 verify Line signature middleware
+- [x] **T28** 🔴 Handle `postback` event — สั่งซื้อสินค้า → reply message
+- [x] **T29** 🟡 Handle `follow` event — welcome message เมื่อ add friend
+- [x] **T30** 🟡 `LineService.pushMessage` — push message กลับหา user
 
 ### ✅ Done Criteria
-- [ ] `nest start:dev` รันติด
-- [ ] `POST /api/auth/login` → ได้ JWT token กลับ
-- [ ] `GET /api/customers` (มี token) → ข้อมูลกลับมา
-- [ ] `POST /api/customers` → insert DB สำเร็จ
-- [ ] `POST /api/line/webhook` → verify signature + reply postback
+- [x] `nest start:dev` รันติด
+- [x] `POST /api/auth/login` → ได้ JWT token กลับ
+- [x] `GET /api/customers` (มี token) → ข้อมูลกลับมา
+- [x] `POST /api/customers` → insert DB สำเร็จ
+- [x] `POST /api/line/webhook` → verify signature + reply postback
 
 ---
 
