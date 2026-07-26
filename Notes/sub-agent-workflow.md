@@ -65,6 +65,17 @@ passport-jwt, bcrypt, class-validator, class-transformer,
 - Commit message ใช้ convention: `{agent-name} | (type): {commit message}`
 ```
 
+## ⚠️ Workflow Rule — API Work (ห้ามลืม!)
+
+**เมื่อมีคำสั่งเกี่ยวกับ API ทุกครั้ง (แก้ไข/เพิ่ม endpoint, ติดตั้ง package ที่เกี่ยวกับ API, เปลี่ยน logic):**
+
+1. **อย่าทำเอง** — Spawn sub-agent `kimi-k2.7-code` เสมอ
+2. sub-agent implement → build → commit + push
+3. ผม (JARVIS) ทดสอบ QA + **อัปเดต `Notes/api-reference.md`** ใน vault เสมอ
+4. Push vault
+
+> สาเหตุ: API งานมีหลายส่วน (controller, service, DTO, decorators, build, deploy) — การทำเองเสี่ยงพลาด/ลืมบางไฟล์
+
 ## ตัวอย่างการใช้งาน
 
 ```bash
