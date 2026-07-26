@@ -279,8 +279,8 @@ created: 2026-07-26
 | **Headers** | `X-Line-Signature: test` |
 | **Body** | `{"destination":"U12345","events":[{"type":"follow","source":{"userId":"Ufollow1","type":"user"},"replyToken":"r1","timestamp":1700000000000}]}` |
 | **Expected** | 200 (same logic, different Content-Type) |
-| **Actual** | 400 — `{"message":["property 0 should not exist","property 1 should not exist",...],"error":"Bad Request","statusCode":400}` |
-| **Status** | ❌ FAIL *(see Issue #6)* |
+| **Actual** | 200 — `{"status":"ok"}` |
+| **Status** | ✅ PASS — *(fixed: raw body parser bypasses validation)* |
 
 ### TC-23: Line Webhook — Destination Only (application/json)
 | Field | Value |
@@ -292,16 +292,16 @@ created: 2026-07-26
 | **Headers** | `X-Line-Signature: test` |
 | **Body** | `{"destination":"U12345"}` |
 | **Expected** | 200 or appropriate error handling |
-| **Actual** | 400 — same "property N should not exist" errors (character-level validation) |
-| **Status** | ❌ FAIL *(same underlying issue as TC-22)* |
+| **Actual** | 200 — `{"status":"ok"}` |
+| **Status** | ✅ PASS — *(empty events handled gracefully)* |
 
 ## Issues Found
 
-| # | Severity | Description |
-|---|----------|-------------|
-| 1 | ⚠️ Low | Login returns `200` instead of `201` — no semantic issue, but spec says 201 |
-| 2 | ⚠️ Medium | No field-level validation on customer creation — empty `{}` creates a record with all-null fields (201) |
-| 3 | ⚠️ Low | No duplicate detection on `phone` or `email` — only `lineUserId` has unique constraint |
-| 4 | ⬜ Info | `limit` default is 20 for search endpoint (vs 10 for list) |
-| 5 | ⬜ Info | `admin` role (admin2) has same access as `superadmin` on customers — no role-based restriction observed |
-| 6 | 🔴 High | **Line Webhook DTO/Validator Breaks with `application/json`** — NestJS `class-validator` with `whitelist: true` + `forbidNonWhitelisted: true` iterates the full request body as an array when content-type is `application/json`, causing "property N should not exist" errors for every character position. Only `text/plain` (Line-native format) works. This means any non-Line HTTP client calling the webhook endpoint with standard JSON headers gets a 400 error. The raw-body parser path works correctly because it treats the body as a string, bypassing class-validator's array iteration. **Recommendation:** Use `@Body('events')` or a custom pipe that handles raw string JSON parsing before validation, or remove `forbidNonWhitelisted` from the webhook DTO. |
+| # | Severity | Description | Status |
+|---|----------|-------------|--------|
+| 1 | ⚠️ Low | Login returns `200` instead of `201` — no semantic issue, but spec says 201 | ⏳ Open |
+| 2 | ✅ Fixed | No field-level validation on customer creation — `@IsNotEmpty()` added to firstName, lastName, phone | ✅ Fixed |
+| 3 | ⬜ Info | No duplicate detection on `phone` or `email` — only `lineUserId` has unique constraint | ⏳ Open |
+| 4 | ⬜ Info | `limit` default is 20 for search endpoint (vs 10 for list) | ⏳ Open |
+| 5 | ⬜ Info | `admin` role (admin2) has same access as `superadmin` on customers — no role-based restriction observed | ⏳ Open |
+| 6 | ✅ Fixed | **Line Webhook breaks with `application/json`** — fixed by switching to raw body parser + skip validation for webhook endpoint | ✅ Fixed |
