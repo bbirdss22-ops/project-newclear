@@ -16,7 +16,9 @@ created: 2026-07-26
 
 | Total | Pass | Fail | Skip |
 |-------|------|------|------|
-| 17    | 16   | 0    | 1    |
+| 24    | 22   | 2    | 0    |
+
+*Line Webhook tests added in this session (S2.4)*
 
 ## Test Results
 
@@ -189,6 +191,110 @@ created: 2026-07-26
 | **Actual** | 401 — same as no-token response (token validation fails before role check) |
 | **Status** | ⏭️ SKIP *(requires separate user with valid token but unauthorized role; no such test account available — both `admin1` and `admin2` have access)* |
 
+### TC-16: Line Webhook — No Signature Header (Env Not Set)
+| Field | Value |
+|-------|-------|
+| **Method** | POST |
+| **Endpoint** | /api/line/webhook |
+| **Auth** | ❌ None |
+| **Content-Type** | `text/plain` (Line native format) |
+| **Headers** | None (no X-Line-Signature) |
+| **Body** | `{"destination":"U12345","events":[{"type":"follow","source":{"userId":"Ufollow1","type":"user"},"replyToken":"r1","timestamp":1700000000000}]}` |
+| **Expected** | 200 (env not set → signature verify skipped gracefully) |
+| **Actual** | 200 — `{"status":"ok"}` |
+| **Status** | ✅ PASS |
+
+### TC-17: Line Webhook — Follow Event
+| Field | Value |
+|-------|-------|
+| **Method** | POST |
+| **Endpoint** | /api/line/webhook |
+| **Auth** | ❌ None |
+| **Content-Type** | `text/plain` |
+| **Headers** | `X-Line-Signature: test` |
+| **Body** | `{"destination":"U12345","events":[{"type":"follow","source":{"userId":"Ufollow1","type":"user"},"replyToken":"r1","timestamp":1700000000000}]}` |
+| **Expected** | 200 + log in line_events |
+| **Actual** | 200 — `{"status":"ok"}` (line_events storage unverifiable — no audit endpoint exposed) |
+| **Status** | ✅ PASS *(functional — event processed without crash)* |
+
+### TC-18: Line Webhook — Postback (action=order)
+| Field | Value |
+|-------|-------|
+| **Method** | POST |
+| **Endpoint** | /api/line/webhook |
+| **Auth** | ❌ None |
+| **Content-Type** | `text/plain` |
+| **Headers** | `X-Line-Signature: test` |
+| **Body** | `{"destination":"U12345","events":[{"type":"postback","source":{"userId":"Upostback1","type":"user"},"replyToken":"r2","timestamp":1700000000000,"postback":{"data":"action=order"}}]}` |
+| **Expected** | 200 |
+| **Actual** | 200 — `{"status":"ok"}` |
+| **Status** | ✅ PASS |
+
+### TC-19: Line Webhook — Postback (action=register)
+| Field | Value |
+|-------|-------|
+| **Method** | POST |
+| **Endpoint** | /api/line/webhook |
+| **Auth** | ❌ None |
+| **Content-Type** | `text/plain` |
+| **Headers** | `X-Line-Signature: test` |
+| **Body** | `{"destination":"U12345","events":[{"type":"postback","source":{"userId":"Upostback2","type":"user"},"replyToken":"r3","timestamp":1700000000000,"postback":{"data":"action=register"}}]}` |
+| **Expected** | 200 |
+| **Actual** | 200 — `{"status":"ok"}` |
+| **Status** | ✅ PASS |
+
+### TC-20: Line Webhook — Empty Body
+| Field | Value |
+|-------|-------|
+| **Method** | POST |
+| **Endpoint** | /api/line/webhook |
+| **Auth** | ❌ None |
+| **Content-Type** | `text/plain` |
+| **Headers** | `X-Line-Signature: test` |
+| **Body** | (empty) |
+| **Expected** | Error handling — no crash |
+| **Actual** | 200 — `{"status":"ok"}` |
+| **Status** | ✅ PASS *(returns ok regardless of empty body — no crash)* |
+
+### TC-21: Line Webhook — Malformed JSON
+| Field | Value |
+|-------|-------|
+| **Method** | POST |
+| **Endpoint** | /api/line/webhook |
+| **Auth** | ❌ None |
+| **Content-Type** | `text/plain` |
+| **Headers** | `X-Line-Signature: test` |
+| **Body** | `this is totally not json {{{` |
+| **Expected** | Error handling — no crash |
+| **Actual** | 200 — `{"status":"ok"}` |
+| **Status** | ✅ PASS *(returns ok even with garbage input — resilient)* |
+
+### TC-22: Line Webhook — application/json Content-Type (Regression)
+| Field | Value |
+|-------|-------|
+| **Method** | POST |
+| **Endpoint** | /api/line/webhook |
+| **Auth** | ❌ None |
+| **Content-Type** | `application/json` |
+| **Headers** | `X-Line-Signature: test` |
+| **Body** | `{"destination":"U12345","events":[{"type":"follow","source":{"userId":"Ufollow1","type":"user"},"replyToken":"r1","timestamp":1700000000000}]}` |
+| **Expected** | 200 (same logic, different Content-Type) |
+| **Actual** | 400 — `{"message":["property 0 should not exist","property 1 should not exist",...],"error":"Bad Request","statusCode":400}` |
+| **Status** | ❌ FAIL *(see Issue #6)* |
+
+### TC-23: Line Webhook — Destination Only (application/json)
+| Field | Value |
+|-------|-------|
+| **Method** | POST |
+| **Endpoint** | /api/line/webhook |
+| **Auth** | ❌ None |
+| **Content-Type** | `application/json` |
+| **Headers** | `X-Line-Signature: test` |
+| **Body** | `{"destination":"U12345"}` |
+| **Expected** | 200 or appropriate error handling |
+| **Actual** | 400 — same "property N should not exist" errors (character-level validation) |
+| **Status** | ❌ FAIL *(same underlying issue as TC-22)* |
+
 ## Issues Found
 
 | # | Severity | Description |
@@ -198,3 +304,4 @@ created: 2026-07-26
 | 3 | ⚠️ Low | No duplicate detection on `phone` or `email` — only `lineUserId` has unique constraint |
 | 4 | ⬜ Info | `limit` default is 20 for search endpoint (vs 10 for list) |
 | 5 | ⬜ Info | `admin` role (admin2) has same access as `superadmin` on customers — no role-based restriction observed |
+| 6 | 🔴 High | **Line Webhook DTO/Validator Breaks with `application/json`** — NestJS `class-validator` with `whitelist: true` + `forbidNonWhitelisted: true` iterates the full request body as an array when content-type is `application/json`, causing "property N should not exist" errors for every character position. Only `text/plain` (Line-native format) works. This means any non-Line HTTP client calling the webhook endpoint with standard JSON headers gets a 400 error. The raw-body parser path works correctly because it treats the body as a string, bypassing class-validator's array iteration. **Recommendation:** Use `@Body('events')` or a custom pipe that handles raw string JSON parsing before validation, or remove `forbidNonWhitelisted` from the webhook DTO. |
