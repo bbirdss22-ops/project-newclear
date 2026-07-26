@@ -12,6 +12,7 @@ updated: 2026-07-26
 > ⚠️ **ต้องอัปเดตทุกครั้งที่มีการแก้ไขหรือเพิ่ม API** — ถ้าเห็น doc นี้ไม่ตรงกับโค้ด ให้แจ้งจาวิส
 
 > Base URL: `https://project-nuclear-api.onrender.com`
+> **Swagger UI:** `https://project-nuclear-api.onrender.com/api/docs`
 
 ## Authentication
 
