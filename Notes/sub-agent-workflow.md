@@ -60,7 +60,9 @@ passport-jwt, bcrypt, class-validator, class-transformer,
 - commit + push ขึ้น GitHub auto-deploy
 
 ### รายงานผล
-บอกไฟล์ที่สร้าง + build status + endpoint status
+- ไฟล์ที่สร้าง + build status + endpoint status
+- ถ้ามีการแก้ไขหรือเพิ่ม API → ต้องอัปเดต `Notes/api-reference.md` ใน vault ด้วย
+- Commit message ใช้ convention: `{agent-name} | (type): {commit message}`
 ```
 
 ## ตัวอย่างการใช้งาน

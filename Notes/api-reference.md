@@ -4,9 +4,12 @@ tags:
   - api
   - documentation
 created: 2026-07-26
+updated: 2026-07-26
 ---
 
 # API Reference — Project Nuclear
+
+> ⚠️ **ต้องอัปเดตทุกครั้งที่มีการแก้ไขหรือเพิ่ม API** — ถ้าเห็น doc นี้ไม่ตรงกับโค้ด ให้แจ้งจาวิส
 
 > Base URL: `https://project-nuclear-api.onrender.com`
 
