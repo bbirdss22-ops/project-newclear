@@ -4,7 +4,7 @@ tags:
   - api
   - documentation
 created: 2026-07-26
-updated: 2026-07-26
+updated: 2026-07-27
 ---
 
 # API Reference — Project Nuclear
@@ -381,6 +381,80 @@ POST /api/line/webhook
 - ถ้า `LINE_CHANNEL_SECRET` ยังไม่ตั้งค่า → Signature verify จะข้ามไป (log warning)
 - ถ้า `LINE_ACCESS_TOKEN` ยังไม่ตั้งค่า → Push message จะไม่ทำงาน
 - ทุก event จะถูก log ลง `line_events` table ใน DB
+
+---
+
+---
+
+## User Profile
+
+### Get Current User Profile (Protected)
+
+```
+GET /api/user-profile/me
+```
+
+**Auth:** ✅ JWT Bearer token (admin/superadmin)
+
+**Response 200:**
+```json
+{
+  "id": "uuid",
+  "userId": "uuid",
+  "displayName": "Admin One",
+  "email": "admin1@project-nuclear.com",
+  "phone": "081-234-5678",
+  "avatarUrl": null,
+  "bio": null,
+  "createdAt": "2026-07-27T...",
+  "updatedAt": "2026-07-27T..."
+}
+```
+
+> ถ้ายังไม่มี profile → auto-create อัตโนมัติ (ส่งกลับ object เปล่าๆ ที่มีแค่ `userId`)
+
+**Response 401 (no token):**
+```json
+{
+  "message": "Unauthorized",
+  "statusCode": 401
+}
+```
+
+---
+
+### Update Current User Profile (Protected)
+
+```
+PUT /api/user-profile/me
+Content-Type: application/json
+```
+
+**Auth:** ✅ JWT Bearer token (admin/superadmin)
+
+**Request Body:** (partial — ส่งเฉพาะ field ที่ต้องการแก้)
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `displayName` | string | ❌ | ชื่อที่แสดง (max 100 chars) |
+| `email` | string | ❌ | อีเมล (ต้องมี @ ถ้าให้) |
+| `phone` | string | ❌ | เบอร์โทร (max 20 chars) |
+| `avatarUrl` | string | ❌ | URL รูปโปรไฟล์ |
+| `bio` | string | ❌ | คำอธิบายสั้นๆ |
+
+**Response 200:**
+```json
+{
+  "id": "uuid",
+  "userId": "uuid",
+  "displayName": "Admin One",
+  "email": "admin1@project-nuclear.com",
+  "phone": "081-234-5678",
+  "avatarUrl": "https://example.com/avatar.jpg",
+  "bio": "Senior admin of Project Nuclear",
+  "createdAt": "2026-07-27T...",
+  "updatedAt": "2026-07-27T..."
+}
+```
 
 ---
 
