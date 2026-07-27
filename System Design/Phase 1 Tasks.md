@@ -113,7 +113,7 @@ created: 2026-07-21
 
 ---
 
-## 📦 S4: Next.js Frontend (3-4 วัน)
+## 📦 S4: Frontend (Vite + shadcn-admin) (3-4 วัน)
 
 > Dependencies: S2 ✅ (API พร้อม), S3 ✅ (Line OA พร้อม)
 
@@ -142,15 +142,20 @@ created: 2026-07-21
 - [x] **T53** 🔴 `/customers` — table รายชื่อลูกค้า (data table + API connect)
 - [x] **T54** 🟡 Search bar — filter ตามชื่อ/เบอร์/email
 - [x] **T55** 🟡 Pagination (20 รายการ/หน้า)
-- [ ] **T56** 🟡 `/dashboard/[id]` — detail page (Badge, Modal, Card) ⬜
+- [x] **T56** 🟡 `/customers/$customerId` — detail page (route + customer detail component) ✅
 - [ ] **T57** 🟢 Export CSV ⬜
 - [x] **T58** 🟢 Dark mode toggle (built-in shadcn)
+- [x] **T59** 🟡 Sidebar cleanup — เหลือแค่ Dashboard, Customers, Change Password ✅
+- [x] **T60** 🔴 Change Password page `/change-password` — form + validation + API connect ✅
+- [x] **T61** 🟡 Error page 500 fix — beforeLoad try/catch + QueryCache handler ✅
 
 ### ✅ Done Criteria
 - [x] `/register` → submit → DB → success page ✅
 - [x] `/login` → JWT → redirect to dashboard ✅
 - [x] `/dashboard` → เห็นรายชื่อลูกค้า ✅
 - [x] Search + pagination ใช้งานได้ ✅
+- [x] `/change-password` → change password via API ✅
+- [x] Auth guard ไม่ error 500 route root ✅
 
 ---
 
@@ -162,6 +167,26 @@ created: 2026-07-21
 - [x] **T60** 🔴 เชื่อมต่อ Dashboard → `GET /api/customers` (Bearer) ✅
 - [ ] **T61** 🟡 หลังสมัครสำเร็จ → Line Push API ส่งข้อความ "สมัครสำเร็จ 🎉" ⬜
 - [ ] **T62** 🟢 Log Line events ลง DB สำหรับ debug ⬜
+
+---
+
+## 📦 S8: Backend Expansion (post-deploy)
+
+> APIs เพิ่มเติมหลังจาก Phase 1 เสร็จ
+
+### Auth Expansion
+- [x] **T80** 🔴 `UserProfile` model + `GET/PUT /user-profile/me` (auto-create) ✅
+- [x] **T81** 🔴 `POST /auth/change-password` — เปลี่ยนรหัสผ่านด้วย JWT ✅
+- [x] **T82** 🟡 Swagger: `@ApiBearerAuth('access-token')` — fix decorator scheme name ทุก endpoint ✅
+### Documentation
+- [x] **T83** 🟡 `api-reference.md` — อัปเดตเพิ่ม user-profile + change-password ✅
+- [x] **T84** 🟡 `AGENTS.md` — เพิ่ม Swagger security section + updated endpoint table ✅
+
+### ✅ Done Criteria
+- [x] user-profile API ใช้ได้ (tested via curl) ✅
+- [x] change-password API ใช้ได้ (build + deploy) ✅
+- [x] Swagger docs แสดง security scheme ถูกต้อง ✅
+- [x] AGENTS.md + api-reference.md อัปเดตตรง ✅
 
 ### ✅ Done Criteria
 - [x] ทุกหน้าเชื่อม API ครบ (register + login + dashboard) ✅
@@ -241,8 +266,10 @@ Mon  Tue  Wed  Thu  Fri   |  Mon  Tue  Wed  Thu  Fri
 
 ```
 🔴 P0 = 47 tasks (core — must have)
-🟡 P1 = 21 tasks (important — should have)
-🟢 P2 = 11 tasks (enhancement — nice to have)
+🟡 P1 = 25 tasks (important — should have)
+🟢 P2 = 13 tasks (enhancement — nice to have)
+
+**รวม: 85 tasks** | S1-S6 + S8 ✅ | S7 remaining
 ```
 
 ดูเพิ่มเติม: [[Phase 1 Plan]]
