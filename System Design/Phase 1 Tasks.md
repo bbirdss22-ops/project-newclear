@@ -228,7 +228,7 @@ created: 2026-07-21
 
 ### S7.1 — Flow Testing
 - [x] **T72** 🔴 Line OA → rich menu → "สั่งซื้อสินค้า" → ได้ข้อความกลับ ✅
-- [ ] **T73** 🔴 Line OA → "สมัครสมาชิก" → ฟอร์ม → submit → DB → success
+- [x] **T73** 🔴 Line OA → "สมัครสมาชิก" → ฟอร์ม → submit → DB → success ✅
 - [x] **T74** 🔴 Dashboard login → เห็นรายชื่อลูกค้า ✅
 - [ ] **T75** 🔴 คลิกดู detail → ข้อมูลถูกต้อง
 

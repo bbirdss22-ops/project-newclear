@@ -36,8 +36,8 @@ created: 2026-07-21
 
 ### ปุ่ม 2: สมัครสมาชิก
 - **Type:** `uri`
-- **URL:** `https://your-app.vercel.app/register?lineUserId={userId}`
-- **เมื่อกด:** เปิด browser ที่ฟอร์มสมัครสมาชิก (ส่ง lineUserId เป็น param)
+- **URL:** `https://project-nuclear-web.vercel.app/register`
+- **เมื่อกด:** เปิด browser ที่ฟอร์มสมัครสมาชิก
 
 ## JSON Rich Menu Definition
 
@@ -73,7 +73,7 @@ created: 2026-07-21
       },
       "action": {
         "type": "uri",
-        "uri": "https://your-app.vercel.app/register?lineUserId={userId}"
+        "uri": "https://project-nuclear-web.vercel.app/register"
       }
     }
   ]
@@ -85,7 +85,12 @@ created: 2026-07-21
 - ขนาด: 2500 × 1686 px
 - Format: PNG/JPG/JPEG
 - Max size: 1MB
-- สร้าง template ด้วย Figma/Canva หรือใช้ solid color + text template
+- ใช้ Pillow generate แบบง่ายๆ (gradient สีน้ำเงิน + ข้อความ)
+
+## Rich Menu ID
+
+- **ID:** `richmenu-f12168ede4eea38f58a36b5adbf2b217`
+- **Status:** ถูก Set เป็น default rich menu สำหรับทุก user แล้ว
 
 ## NestJS Webhook Handler
 
@@ -108,3 +113,5 @@ async handleWebhook(@Body() body: WebhookEventBody) {
 1. Upload image → `POST /v2/bot/richmenu` → ได้ richMenuId
 2. Upload image → `POST /v2/bot/richmenu/{richMenuId}/content` (binary)
 3. Set default → `POST /v2/bot/user/all/richmenu/{richMenuId}`
+
+✅ **ครั้งแรกเรียบร้อยแล้ว (2026-07-27)**
