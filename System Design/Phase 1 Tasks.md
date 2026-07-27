@@ -69,20 +69,20 @@ created: 2026-07-21
 - [ ] **T23** 🟡 `GET /api/customers/line/:lineUserId` — find by Line userId
 - [ ] **T24** 🟢 `PATCH /api/customers/:id` — update customer info
 
-### S2.4 — Line Module
-- [ ] **T25** 🔴 ติดตั้ง `@line/bot-sdk`
-- [ ] **T26** 🔴 `LineModule` + webhook endpoint `POST /api/line/webhook`
-- [ ] **T27** 🔴 verify Line signature middleware
-- [ ] **T28** 🔴 Handle `postback` event — สั่งซื้อสินค้า → reply message
-- [ ] **T29** 🟡 Handle `follow` event — welcome message เมื่อ add friend
-- [ ] **T30** 🟡 `LineService.pushMessage` — push message กลับหา user
+### S2.4 — Line Module ✅
+- [x] **T25** 🔴 ติดตั้ง `@line/bot-sdk`
+- [x] **T26** 🔴 `LineModule` + webhook endpoint `POST /api/line/webhook`
+- [x] **T27** 🔴 verify Line signature middleware
+- [x] **T28** 🔴 Handle `postback` event — สั่งซื้อสินค้า → reply message
+- [x] **T29** 🟡 Handle `follow` event — welcome message เมื่อ add friend
+- [x] **T30** 🟡 `LineService.pushMessage` — push message กลับหา user
 
 ### ✅ Done Criteria
-- [ ] `nest start:dev` รันติด
-- [ ] `POST /api/auth/login` → ได้ JWT token กลับ
-- [ ] `GET /api/customers` (มี token) → ข้อมูลกลับมา
-- [ ] `POST /api/customers` → insert DB สำเร็จ
-- [ ] `POST /api/line/webhook` → verify signature + reply postback
+- [x] `nest start:dev` รันติด
+- [x] `POST /api/auth/login` → ได้ JWT token กลับ
+- [x] `GET /api/customers` (มี token) → ข้อมูลกลับมา
+- [x] `POST /api/customers` → insert DB สำเร็จ
+- [x] `POST /api/line/webhook` → verify signature + reply postback
 
 ---
 
@@ -90,21 +90,21 @@ created: 2026-07-21
 
 > Dependencies: S2.4 ✅ (webhook endpoint พร้อม)
 
-### S3.1 — Line OA Setup
-- [ ] **T31** 🔴 สร้าง Line OA ที่ [LINE Developers Console](https://developers.line.biz)
-- [ ] **T32** 🔴 จด Channel ID, Channel Secret, Channel Access Token
+### S3.1 — Line OA Setup ✅
+- [x] **T31** 🔴 สร้าง Line OA ที่ [LINE Developers Console](https://developers.line.biz)
+- [x] **T32** 🔴 จด Channel ID, Channel Secret, Channel Access Token
 
-### S3.2 — Rich Menu
-- [ ] **T33** 🔴 ออกแบบ Rich Menu image (2500x1686 px) — ใช้ Canva/Figma
-- [ ] **T34** 🔴 สร้าง Rich Menu JSON + upload ผ่าน API
-- [ ] **T35** 🔴 Upload rich menu image → get richMenuId
-- [ ] **T36** 🔴 Set default rich menu `POST /v2/bot/user/all/richmenu/{richMenuId}`
-- [ ] **T37** 🟡 Config webhook URL → `https://your-app.onrender.com/api/line/webhook`
+### S3.2 — Rich Menu ✅
+- [x] **T33** 🔴 ออกแบบ Rich Menu image (2500x1686 px) — ใช้ Canva/Figma
+- [x] **T34** 🔴 สร้าง Rich Menu JSON + upload ผ่าน API
+- [x] **T35** 🔴 Upload rich menu image → get richMenuId
+- [x] **T36** 🔴 Set default rich menu `POST /v2/bot/user/all/richmenu/{richMenuId}`
+- [x] **T37** 🟡 Config webhook URL → `https://your-app.onrender.com/api/line/webhook`
 
 ### ✅ Done Criteria
-- [ ] แอด Line OA แล้วเห็น Rich Menu
-- [ ] กด "สั่งซื้อสินค้า" → ข้อความกลับมา
-- [ ] กด "สมัครสมาชิก" → เปิด URL ไปฟอร์ม
+- [x] แอด Line OA แล้วเห็น Rich Menu
+- [x] กด "สั่งซื้อสินค้า" → ข้อความกลับมา
+- [x] กด "สมัครสมาชิก" → เปิด URL ไปฟอร์ม
 
 ---
 
@@ -112,40 +112,40 @@ created: 2026-07-21
 
 > Dependencies: S2 ✅ (API พร้อม), S3 ✅ (Line OA พร้อม)
 
-### S4.1 — Project Init
-- [ ] **T38** 🔴 `npx create-next-app@latest project-newclear-web`
-- [ ] **T39** 🔴 ติดตั้ง Astryx Design System: `npm install @atmeta/astryx`
-- [ ] **T40** 🟡 ติดตั้ง Tailwind CSS + configure
-- [ ] **T41** 🟡 Config Astryx theme → brand colors
-- [ ] **T42** 🔴 Setup environment variables (`.env.local`)
+### S4.1 — Project Init ✅
+- [x] **T38** 🔴 clone shadcn-admin template (Vite + TanStack Router + shadcn/ui) แทน Next.js
+- [x] **T39** 🔴 shadcn/ui + Tailwind CSS พร้อม
+- [x] **T40** 🟡 ติดตั้ง Tailwind CSS + configure ✅
+- [x] **T41** 🟡 shadcn/ui theme ใช้ default (dark/light toggle)
+- [x] **T42** 🔴 Setup environment variables (`VITE_API_BASE_URL`)
 
-### S4.2 — Registration Flow
-- [ ] **T43** 🔴 `/register` page — รับ `lineUserId` จาก query param
-- [ ] **T44** 🔴 Registration form — ชื่อ, นามสกุล, เบอร์, email, ที่อยู่
-- [ ] **T45** 🔴 Form validation (required fields, format check)
-- [ ] **T46** 🔴 Submit → `POST /api/customers`
-- [ ] **T47** 🔴 `/register/success` page
-- [ ] **T48** 🟡 Loading state + error handling
+### S4.2 — Registration Flow ✅
+- [x] **T43** 🔴 `/register` page — รับ `lineUserId` จาก query param
+- [x] **T44** 🔴 Registration form — ชื่อ, นามสกุล, เบอร์, email, ที่อยู่
+- [x] **T45** 🔴 Form validation (Zod + react-hook-form)
+- [x] **T46** 🔴 Submit → `POST /api/customers` ✅
+- [x] **T47** 🔴 `/register/success` page (inline success state)
+- [x] **T48** 🟡 Loading state + error handling (toast)
 
-### S4.3 — Auth (Dashboard Login)
-- [ ] **T49** 🔴 `/login` page — username + password form
-- [ ] **T50** 🔴 Login → `POST /api/auth/login` → เก็บ JWT
-- [ ] **T51** 🔴 Auth middleware — protect dashboard routes
-- [ ] **T52** 🟡 Auto-redirect ถ้า token หมดอายุ
+### S4.3 — Auth (Dashboard Login) ✅
+- [x] **T49** 🔴 `/sign-in` page — username + password form (replace Clerk mock)
+- [x] **T50** 🔴 Login → `POST /api/auth/login` → เก็บ JWT + user ใน zustand store
+- [x] **T51** 🔴 Auth middleware — `beforeLoad` guard redirect → `/sign-in` ถ้าไม่มี token
+- [x] **T52** 🟡 Auto-redirect ถ้า token หมดอายุ (401 interceptor)
 
-### S4.4 — Dashboard
-- [ ] **T53** 🔴 `/dashboard` — table รายชื่อลูกค้า
-- [ ] **T54** 🟡 Search bar — filter ตามชื่อ/เบอร์/email
-- [ ] **T55** 🟡 Pagination (20 รายการ/หน้า)
-- [ ] **T56** 🟡 `/dashboard/[id]` — detail page (Badge, Modal, Card)
-- [ ] **T57** 🟢 Export CSV — ดึงรายชื่อลูกค้าออกเป็นไฟล์
-- [ ] **T58** 🟢 Dark mode toggle
+### S4.4 — Dashboard (Partial ✅)
+- [x] **T53** 🔴 `/customers` — table รายชื่อลูกค้า (data table + API connect)
+- [x] **T54** 🟡 Search bar — filter ตามชื่อ/เบอร์/email
+- [x] **T55** 🟡 Pagination (20 รายการ/หน้า)
+- [ ] **T56** 🟡 `/dashboard/[id]` — detail page (Badge, Modal, Card) ⬜
+- [ ] **T57** 🟢 Export CSV ⬜
+- [x] **T58** 🟢 Dark mode toggle (built-in shadcn)
 
 ### ✅ Done Criteria
-- [ ] `/register` → submit → DB → success page
-- [ ] `/login` → JWT → redirect to dashboard
-- [ ] `/dashboard` → เห็นรายชื่อลูกค้า
-- [ ] Search + pagination ใช้งานได้
+- [x] `/register` → submit → DB → success page ✅
+- [x] `/login` → JWT → redirect to dashboard ✅
+- [x] `/dashboard` → เห็นรายชื่อลูกค้า ✅
+- [x] Search + pagination ใช้งานได้ ✅
 
 ---
 
@@ -153,14 +153,14 @@ created: 2026-07-21
 
 > Dependencies: S2 ✅, S4 ✅
 
-- [ ] **T59** 🔴 เชื่อมต่อ Form Register → `POST /api/customers`
-- [ ] **T60** 🔴 เชื่อมต่อ Dashboard → `GET /api/customers` (Bearer)
-- [ ] **T61** 🟡 หลังสมัครสำเร็จ → Line Push API ส่งข้อความ "สมัครสำเร็จ 🎉"
-- [ ] **T62** 🟢 Log Line events ลง DB สำหรับ debug
+- [x] **T59** 🔴 เชื่อมต่อ Form Register → `POST /api/customers` ✅
+- [x] **T60** 🔴 เชื่อมต่อ Dashboard → `GET /api/customers` (Bearer) ✅
+- [ ] **T61** 🟡 หลังสมัครสำเร็จ → Line Push API ส่งข้อความ "สมัครสำเร็จ 🎉" ⬜
+- [ ] **T62** 🟢 Log Line events ลง DB สำหรับ debug ⬜
 
 ### ✅ Done Criteria
-- [ ] ทุกหน้าเชื่อม API ครบ
-- [ ] Line push ทำงานเมื่อสมัครเสร็จ
+- [x] ทุกหน้าเชื่อม API ครบ (register + login + dashboard) ✅
+- [ ] Line push ทำงานเมื่อสมัครเสร็จ ⬜
 
 ---
 
@@ -168,18 +168,18 @@ created: 2026-07-21
 
 > Dependencies: S5 ✅
 
-### S6.1 — Render (NestJS)
-- [ ] **T63** 🔴 Push NestJS code ขึ้น GitHub
-- [ ] **T64** 🔴 Connect repo → Render → New Web Service
-- [ ] **T65** 🔴 ENV: `DATABASE_URL`, `LINE_CHANNEL_SECRET`, `LINE_ACCESS_TOKEN`, `JWT_SECRET`
-- [ ] **T66** 🔴 Build: `npm install && npm run build`
-- [ ] **T67** 🔴 Start: `npm run start:prod`
+### S6.1 — Render (NestJS) ✅
+- [x] **T63** 🔴 Push NestJS code ขึ้น GitHub ✅
+- [x] **T64** 🔴 Connect repo → Render → New Web Service ✅
+- [x] **T65** 🔴 ENV: `DATABASE_URL`, `LINE_CHANNEL_SECRET`, `LINE_ACCESS_TOKEN`, `JWT_SECRET` ✅
+- [x] **T66** 🔴 Build: `npm install && npm run build` ✅
+- [x] **T67** 🔴 Start: `npm run start:prod` ✅
 
-### S6.2 — Vercel (Next.js)
-- [ ] **T68** 🔴 Push Next.js code ขึ้น GitHub
-- [ ] **T69** 🔴 Connect repo → Vercel → Import
-- [ ] **T70** 🔴 ENV: `NEXT_PUBLIC_API_URL=https://your-app.onrender.com`
-- [ ] **T71** 🟡 Config custom domain (ถ้ามี)
+### S6.2 — Vercel (Vite/React Frontend) ✅
+- [x] **T68** 🔴 Push frontend code ขึ้น GitHub ✅
+- [x] **T69** 🔴 Connect repo → Vercel → Import ✅
+- [x] **T70** 🔴 ENV: `VITE_API_BASE_URL=https://project-nuclear-api.onrender.com` ✅
+- [ ] **T71** 🟡 Config custom domain (ถ้ามี) ⬜
 
 ### ✅ Done Criteria
 - [ ] `your-app.onrender.com/api/customers` ใช้ได้
