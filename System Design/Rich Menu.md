@@ -35,9 +35,10 @@ created: 2026-07-21
 - **เมื่อกด:** NestJS webhook รับ postback แล้ว Reply ข้อความ "สั่งซื้อสินค้า" กลับไป
 
 ### ปุ่ม 2: สมัครสมาชิก
-- **Type:** `uri`
-- **URL:** `https://project-nuclear-web.vercel.app/register`
-- **เมื่อกด:** เปิด browser ที่ฟอร์มสมัครสมาชิก
+- **Type:** `postback`
+- **Data:** `action=register`
+- **เมื่อกด:** NestJS webhook รับ postback → สร้าง temporary token (UUID, expires 5 นาที) → Reply ลิงก์พร้อม token
+- **หน้า Register:** รับ token query param → validate กับ backend → resolve เป็น lineUserId → submit form
 
 ## JSON Rich Menu Definition
 
@@ -72,8 +73,9 @@ created: 2026-07-21
         "height": 843
       },
       "action": {
-        "type": "uri",
-        "uri": "https://project-nuclear-web.vercel.app/register"
+        "type": "postback",
+        "data": "action=register",
+        "displayText": "สมัครสมาชิก"
       }
     }
   ]
