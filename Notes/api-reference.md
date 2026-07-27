@@ -95,11 +95,12 @@ Authorization: Bearer <access_token>
 }
 ```
 
-**Response 401 (รหัสผ่านปัจจุบันผิด):**
+**Response 400 (รหัสผ่านปัจจุบันผิด):**
 ```json
 {
   "message": "Current password is incorrect",
-  "statusCode": 401
+  "error": "Bad Request",
+  "statusCode": 400
 }
 ```
 
