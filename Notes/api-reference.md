@@ -72,6 +72,48 @@ Content-Type: application/json
 
 ---
 
+### Change Password (Protected)
+
+```
+POST /api/auth/change-password
+Content-Type: application/json
+Authorization: Bearer <access_token>
+```
+
+**Auth:** ✅ JWT Bearer token (admin/superadmin)
+
+**Request Body:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `currentPassword` | string | ✅ | รหัสผ่านปัจจุบัน |
+| `newPassword` | string | ✅ | รหัสผ่านใหม่ (อย่างน้อย 6 ตัว) |
+
+**Response 200:**
+```json
+{
+  "message": "Password changed successfully"
+}
+```
+
+**Response 401 (รหัสผ่านปัจจุบันผิด):**
+```json
+{
+  "message": "Current password is incorrect",
+  "statusCode": 401
+}
+```
+
+**Response 400 (newPassword สั้นเกิน):**
+```json
+{
+  "message": ["newPassword must be longer than or equal to 6 characters"],
+  "error": "Bad Request",
+  "statusCode": 400
+}
+```
+
+---
+
 ## Health Check
 
 ```
