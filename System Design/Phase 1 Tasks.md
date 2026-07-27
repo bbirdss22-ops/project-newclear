@@ -181,12 +181,16 @@ created: 2026-07-21
 ### Documentation
 - [x] **T83** 🟡 `api-reference.md` — อัปเดตเพิ่ม user-profile + change-password ✅
 - [x] **T84** 🟡 `AGENTS.md` — เพิ่ม Swagger security section + updated endpoint table ✅
+- [x] **T85** 🟡 `api-reference.md` — อัปเดต change-password error code 401 → 400 ✅
+- [x] **T86** 🟡 `AGENTS.md` — เพิ่ม RULE: ทุก API update ต้อง update Swagger ให้ตรง ✅
 
 ### ✅ Done Criteria
 - [x] user-profile API ใช้ได้ (tested via curl) ✅
 - [x] change-password API ใช้ได้ (build + deploy) ✅
+- [x] change-password error code 400 (Bad Request) แทน 401 ✅
 - [x] Swagger docs แสดง security scheme ถูกต้อง ✅
 - [x] AGENTS.md + api-reference.md อัปเดตตรง ✅
+- [x] AGENTS.md มี RULE ว่า Swagger ต้องตรงกับ API ทุกครั้ง ✅
 
 ### ✅ Done Criteria
 - [x] ทุกหน้าเชื่อม API ครบ (register + login + dashboard) ✅
@@ -269,7 +273,7 @@ Mon  Tue  Wed  Thu  Fri   |  Mon  Tue  Wed  Thu  Fri
 🟡 P1 = 25 tasks (important — should have)
 🟢 P2 = 13 tasks (enhancement — nice to have)
 
-**รวม: 85 tasks** | S1-S6 + S8 ✅ | S7 remaining
+**รวม: 87 tasks** | S1-S6 + S8 ✅ | S7 remaining
 ```
 
 ดูเพิ่มเติม: [[Phase 1 Plan]]
