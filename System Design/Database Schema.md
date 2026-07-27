@@ -6,7 +6,7 @@ tags:
   - mlm
   - commission
 created: 2026-07-21
-updated: 2026-07-24
+updated: 2026-07-27
 ---
 
 # Database Schema
@@ -17,6 +17,7 @@ updated: 2026-07-24
 
 ```mermaid
 erDiagram
+    users ||--o| user_profiles : "has"
     users ||--o{ commissions : "approve"
 
     customers ||--o{ customers : "referrer"
@@ -42,6 +43,17 @@ erDiagram
         string password
         string role
         datetime created_at
+    }
+    user_profiles {
+        uuid id PK
+        uuid user_id FK
+        string display_name
+        string email
+        string phone
+        string avatar_url
+        string bio
+        datetime created_at
+        datetime updated_at
     }
     customers {
         uuid id PK
@@ -239,6 +251,33 @@ CREATE TABLE line_events (
 
 CREATE INDEX idx_line_events_user ON line_events(line_user_id);
 ```
+
+---
+
+### `user_profiles` — โปรไฟล์ Admin (1:1 กับ users)
+
+> เพิ่มเมื่อ: 2026-07-27 — สำหรับ admin dashboard users
+> Auto-create เมื่อเรียก `GET /user-profile/me` ครั้งแรก
+
+```sql
+CREATE TABLE user_profiles (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id         UUID NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  display_name    VARCHAR(100),
+  email           VARCHAR(255),
+  phone           VARCHAR(20),
+  avatar_url      TEXT,
+  bio             TEXT,
+  created_at      TIMESTAMPTZ DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+**API:**
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| GET | `/api/user-profile/me` | ✅ Bearer | Get current user profile (auto-create)
+| PUT | `/api/user-profile/me` | ✅ Bearer | Update displayName, email, phone, avatarUrl, bio
 
 ---
 
@@ -506,6 +545,7 @@ CREATE UNIQUE INDEX idx_payout_period_unique ON payout_periods(period_type, peri
 | ตาราง | ใช้ทำอะไร |
 |---|---|
 | `users` | Admin dashboard users |
+| `user_profiles` | โปรไฟล์ Admin (1:1 กับ users) |
 | `customers` | ลูกค้า + MLM tree |
 | `line_events` | Log event Line OA |
 | `products` | สินค้า + ตั้งค่า PV |
