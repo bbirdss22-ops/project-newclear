@@ -213,12 +213,12 @@ created: 2026-07-21
 - [x] **T68** 🔴 Push frontend code ขึ้น GitHub ✅
 - [x] **T69** 🔴 Connect repo → Vercel → Import ✅
 - [x] **T70** 🔴 ENV: `VITE_API_BASE_URL=https://project-nuclear-api.onrender.com` ✅
-- [ ] **T71** 🟡 Config custom domain (ถ้ามี) ⬜
+- [x] **T71** 🟡 Config custom domain (ถ้ามี) — ใช้ Vercel domain ไปก่อน ✅
 
 ### ✅ Done Criteria
-- [ ] `your-app.onrender.com/api/customers` ใช้ได้
-- [ ] `your-app.vercel.app/register` ใช้ได้
-- [ ] Line webhook → Render endpoint
+- [x] `your-app.onrender.com/api/customers` ใช้ได้
+- [x] `your-app.vercel.app/register` ใช้ได้
+- [x] Line webhook → Render endpoint
 
 ---
 
@@ -227,9 +227,9 @@ created: 2026-07-21
 > Dependencies: S6 ✅ (deployed)
 
 ### S7.1 — Flow Testing
-- [ ] **T72** 🔴 Line OA → rich menu → "สั่งซื้อสินค้า" → ได้ข้อความกลับ
+- [x] **T72** 🔴 Line OA → rich menu → "สั่งซื้อสินค้า" → ได้ข้อความกลับ ✅
 - [ ] **T73** 🔴 Line OA → "สมัครสมาชิก" → ฟอร์ม → submit → DB → success
-- [ ] **T74** 🔴 Dashboard login → เห็นรายชื่อลูกค้า
+- [x] **T74** 🔴 Dashboard login → เห็นรายชื่อลูกค้า ✅
 - [ ] **T75** 🔴 คลิกดู detail → ข้อมูลถูกต้อง
 
 ### S7.2 — Edge Cases
