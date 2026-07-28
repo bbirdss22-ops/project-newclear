@@ -6,7 +6,7 @@ tags:
   - mlm
   - commission
 created: 2026-07-21
-updated: 2026-07-27
+updated: 2026-07-28
 ---
 
 # Database Schema
@@ -58,6 +58,7 @@ erDiagram
     customers {
         uuid id PK
         string line_user_id UK
+        string code UK "NC00001"
         string display_name
         string first_name
         string last_name
