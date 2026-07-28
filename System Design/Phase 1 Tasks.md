@@ -165,7 +165,7 @@ created: 2026-07-21
 
 - [x] **T59** 🔴 เชื่อมต่อ Form Register → `POST /api/customers` ✅
 - [x] **T60** 🔴 เชื่อมต่อ Dashboard → `GET /api/customers` (Bearer) ✅
-- [ ] **T61** 🟡 หลังสมัครสำเร็จ → Line Push API ส่งข้อความ "สมัครสำเร็จ 🎉" ⬜
+- [ ] **T61** 🟡 หลังสมัครสำเร็จ → Line Push API ส่งข้อความ "สมัครสำเร็จ 🎉" พร้อม customer code ⬜
 - [ ] **T62** 🟢 Log Line events ลง DB สำหรับ debug ⬜
 
 ---
@@ -178,11 +178,28 @@ created: 2026-07-21
 - [x] **T80** 🔴 `UserProfile` model + `GET/PUT /user-profile/me` (auto-create) ✅
 - [x] **T81** 🔴 `POST /auth/change-password` — เปลี่ยนรหัสผ่านด้วย JWT ✅
 - [x] **T82** 🟡 Swagger: `@ApiBearerAuth('access-token')` — fix decorator scheme name ทุก endpoint ✅
+### Customer Code
+- [ ] **T83** 🔴 Prisma: เพิ่ม field `code` ใน Customer model + migration
+- [ ] **T84** 🔴 `CustomerService.generateCustomerCode()` — `NC` + zero-pad 5 digit
+- [ ] **T85** 🔴 เรียก `generateCustomerCode()` ตอน `createCustomer()`
+- [ ] **T86** 🟢 LINE push welcome message with customer code
+- [ ] **T87** 🟢 Frontend success page — แสดง customer code
+
+### Customer Referral
+- [ ] **T88** 🔴 `case 'referral'` ใน `LineService.handlePostback()` — สร้าง referral link
+- [ ] **T89** 🔴 `CustomerService.getReferralLink()` — gen link `?referrerId={customer.id}`
+- [ ] **T90** 🔴 Reply LINE พร้อม referral link + invite text
+- [ ] **T91** 🔴 เพิ่มปุ่ม "🎯 แนะนำเพื่อน" ใน Rich Menu
+- [ ] **T92** 🟡 Frontend: แสดง "แนะนำโดย" เมื่อมี `referrerId` ใน URL
+- [ ] **T93** 🟡 Binary Tree Auto-Placement Algorithm
+- [ ] **T94** 🟡 Commission Calculation เมื่อ order → paid
+- [ ] **T95** 🟢 API: `GET /api/customers/me/referrals` — ดูคนที่ชวนมา
+
 ### Documentation
-- [x] **T83** 🟡 `api-reference.md` — อัปเดตเพิ่ม user-profile + change-password ✅
-- [x] **T84** 🟡 `AGENTS.md` — เพิ่ม Swagger security section + updated endpoint table ✅
-- [x] **T85** 🟡 `api-reference.md` — อัปเดต change-password error code 401 → 400 ✅
-- [x] **T86** 🟡 `AGENTS.md` — เพิ่ม RULE: ทุก API update ต้อง update Swagger ให้ตรง ✅
+- [x] **T96** 🟡 `api-reference.md` — อัปเดตเพิ่ม user-profile + change-password ✅
+- [x] **T97** 🟡 `AGENTS.md` — เพิ่ม Swagger security section + updated endpoint table ✅
+- [x] **T98** 🟡 `api-reference.md` — อัปเดต change-password error code 401 → 400 ✅
+- [x] **T99** 🟡 `AGENTS.md` — เพิ่ม RULE: ทุก API update ต้อง update Swagger ให้ตรง ✅
 
 ### ✅ Done Criteria
 - [x] user-profile API ใช้ได้ (tested via curl) ✅
@@ -191,10 +208,8 @@ created: 2026-07-21
 - [x] Swagger docs แสดง security scheme ถูกต้อง ✅
 - [x] AGENTS.md + api-reference.md อัปเดตตรง ✅
 - [x] AGENTS.md มี RULE ว่า Swagger ต้องตรงกับ API ทุกครั้ง ✅
-
-### ✅ Done Criteria
-- [x] ทุกหน้าเชื่อม API ครบ (register + login + dashboard) ✅
-- [ ] Line push ทำงานเมื่อสมัครเสร็จ ⬜
+- [ ] Customer Code auto-gen + LINE push ⬜
+- [ ] Customer Referral link + invite flow ⬜
 
 ---
 
