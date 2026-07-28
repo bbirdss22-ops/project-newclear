@@ -125,12 +125,15 @@ created: 2026-07-21
 - [x] **T42** 🔴 Setup environment variables (`VITE_API_BASE_URL`)
 
 ### S4.2 — Registration Flow ✅
-- [x] **T43** 🔴 `/register` page — รับ `lineUserId` จาก query param
-- [x] **T44** 🔴 Registration form — ชื่อ, นามสกุล, เบอร์, email, ที่อยู่
-- [x] **T45** 🔴 Form validation (Zod + react-hook-form)
-- [x] **T46** 🔴 Submit → `POST /api/customers` ✅
-- [x] **T47** 🔴 `/register/success` page (inline success state)
-- [x] **T48** 🟡 Loading state + error handling (toast)
+- [x] **T43** 🔴 `/register` page — รับ `lineUserId` จาก query param ✅
+- [x] **T44** 🔴 Registration form — ชื่อ, นามสกุล, เบอร์, email, ที่อยู่ ✅
+- [x] **T45** 🔴 Form validation (Zod + react-hook-form) ✅
+- [x] **T46** 🔴 Submit → `POST /api/customers` → Customer Code auto-gen ✅
+- [x] **T47** 🔴 `/register/success` page (success state + customer code + countdown 10s auto-close) ✅
+- [x] **T48** 🟡 Loading state + error handling (toast) ✅
+- [x] **T100** 🟢 Social login (GitHub/Facebook) ลบออกจากหน้า sign-in ✅
+- [x] **T101** 🟢 ปุ่ม "กลับหน้าหลัก" ลบออกจากหน้า success (เหลือแค่ "ปิดเลย") ✅
+- [x] **T102** 🟢 Rebrand: Theme เขียวธรรมชาติ + โลโก้ตรานิวเคลียร์ + ข้อความ "เกษตรนิวเคลียร์" ทั้งระบบ ✅
 
 ### S4.3 — Auth (Dashboard Login) ✅
 - [x] **T49** 🔴 `/sign-in` page — username + password form (replace Clerk mock)
