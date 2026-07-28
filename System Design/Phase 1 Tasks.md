@@ -165,7 +165,7 @@ created: 2026-07-21
 
 - [x] **T59** 🔴 เชื่อมต่อ Form Register → `POST /api/customers` ✅
 - [x] **T60** 🔴 เชื่อมต่อ Dashboard → `GET /api/customers` (Bearer) ✅
-- [ ] **T61** 🟡 หลังสมัครสำเร็จ → Line Push API ส่งข้อความ "สมัครสำเร็จ 🎉" พร้อม customer code ⬜
+- [x] **T61** 🟡 หลังสมัครสำเร็จ → Line Push API ส่งข้อความ "สมัครสำเร็จ 🎉" พร้อม customer code ✅
 - [ ] **T62** 🟢 Log Line events ลง DB สำหรับ debug ⬜
 
 ---
@@ -178,12 +178,12 @@ created: 2026-07-21
 - [x] **T80** 🔴 `UserProfile` model + `GET/PUT /user-profile/me` (auto-create) ✅
 - [x] **T81** 🔴 `POST /auth/change-password` — เปลี่ยนรหัสผ่านด้วย JWT ✅
 - [x] **T82** 🟡 Swagger: `@ApiBearerAuth('access-token')` — fix decorator scheme name ทุก endpoint ✅
-### Customer Code
-- [ ] **T83** 🔴 Prisma: เพิ่ม field `code` ใน Customer model + migration
-- [ ] **T84** 🔴 `CustomerService.generateCustomerCode()` — `NC` + zero-pad 5 digit
-- [ ] **T85** 🔴 เรียก `generateCustomerCode()` ตอน `createCustomer()`
-- [ ] **T86** 🟢 LINE push welcome message with customer code
-- [ ] **T87** 🟢 Frontend success page — แสดง customer code
+### Customer Code ✅
+- [x] **T83** 🔴 Prisma: เพิ่ม field `code` ใน Customer model + migration ✅
+- [x] **T84** 🔴 `CustomerService.generateCustomerCode()` — `NC` + zero-pad 5 digit ✅
+- [x] **T85** 🔴 เรียก `generateCustomerCode()` ตอน `createCustomer()` ✅
+- [x] **T86** 🟢 LINE push welcome message with customer code ✅
+- [x] **T87** 🟢 Frontend success page — แสดง customer code ✅
 
 ### Customer Referral
 - [ ] **T88** 🔴 `case 'referral'` ใน `LineService.handlePostback()` — สร้าง referral link
@@ -208,7 +208,7 @@ created: 2026-07-21
 - [x] Swagger docs แสดง security scheme ถูกต้อง ✅
 - [x] AGENTS.md + api-reference.md อัปเดตตรง ✅
 - [x] AGENTS.md มี RULE ว่า Swagger ต้องตรงกับ API ทุกครั้ง ✅
-- [ ] Customer Code auto-gen + LINE push ⬜
+- [x] Customer Code auto-gen + LINE push ✅
 - [ ] Customer Referral link + invite flow ⬜
 
 ---
@@ -243,7 +243,7 @@ created: 2026-07-21
 
 ### S7.1 — Flow Testing
 - [x] **T72** 🔴 Line OA → rich menu → "สั่งซื้อสินค้า" → ได้ข้อความกลับ ✅
-- [x] **T73** 🔴 Line OA → "สมัครสมาชิก" → ฟอร์ม → submit → DB → success ✅
+- [x] **T73** 🔴 Line OA → "สมัครสมาชิก" → ฟอร์ม → submit → DB → success (พร้อม Customer Code) ✅
 - [x] **T74** 🔴 Dashboard login → เห็นรายชื่อลูกค้า ✅
 - [ ] **T75** 🔴 คลิกดู detail → ข้อมูลถูกต้อง
 
