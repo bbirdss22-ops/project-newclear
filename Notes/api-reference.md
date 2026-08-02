@@ -326,6 +326,7 @@ GET /api/customers?page=1&pageSize=20
 | `page` | number | 1 | หน้าปัจจุบัน |
 | `pageSize` | number | 20 | จำนวนต่อหน้า (แนะนำให้ใช้) |
 | `limit` | number | 20 | **[Deprecated]** — ยังใช้ได้แต่แนะนำ `pageSize` |
+| `bankStatus` | string | — | กรองตามสถานะ bank: `none` \| `pending` \| `approved` \| `rejected` |
 
 > Priority: `pageSize` > `limit` > default 20
 
@@ -346,6 +347,9 @@ GET /api/customers?page=1&pageSize=20
       "bankName": null,
       "bankAccountName": null,
       "bankAccountNumber": null,
+      "bankBookPath": null,
+      "bankStatus": "none",
+      "bankRejectReason": null,
       "referrerId": null,
       "status": "active",
       "registeredAt": "2026-07-26T10:00:00.000Z",
@@ -543,6 +547,172 @@ Authorization: Bearer <access_token>
   "message": "Referrer with id \"uuid\" not found",
   "error": "Bad Request",
   "statusCode": 400
+}
+```
+
+---
+
+### Upload Bank Book (Public)
+
+```
+POST /api/customers/:id/bank-book
+Content-Type: multipart/form-data
+```
+
+**Auth:** ❌ Public (ลูกค้า upload เอง — เช่น จากหน้า register)
+
+**Path Parameters:**
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | UUID ของ customer |
+
+**FormData Fields:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `file` | file | ✅ | รูปสมุดบัญชี — ≤5MB, ชนิด jpeg/png/webp |
+
+**Flow:** อัปโหลดขึ้น Supabase Storage → บันทึก `bankBookPath` → ตั้ง `bankStatus='pending'` (ถ้าเดิม none/rejected) → ล้าง `bankRejectReason`
+
+**Response 201 (updated customer):**
+```json
+{
+  "id": "uuid",
+  "bankBookPath": "bank-books/{customerId}/{timestamp}-{filename}",
+  "bankStatus": "pending"
+}
+```
+
+**Response 400 (approved / invalid file):**
+```json
+{ "message": "บัญชีธนาคารผ่านการตรวจสอบแล้ว ไม่สามารถอัปโหลดซ้ำได้", "error": "Bad Request", "statusCode": 400 }
+```
+
+**Response 404:** `Customer with id "uuid" not found`
+
+---
+
+### Get Bank Book Signed URL (Protected)
+
+```
+GET /api/customers/:id/bank-book-url
+Authorization: Bearer <access_token>
+```
+
+**Auth:** ✅ JWT Bearer token (admin/superadmin)
+
+**Path Parameters:**
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | UUID ของ customer |
+
+**Response 200:**
+```json
+{ "url": "https://...signed-url-5min..." }
+```
+
+**Response 404 (ไม่มีรูป):**
+```json
+{ "message": "ยังไม่มีรูปสมุดบัญชี", "error": "Not Found", "statusCode": 404 }
+```
+
+---
+
+### Bank Review — Approve / Reject (Protected)
+
+```
+POST /api/customers/:id/bank-review
+Content-Type: application/json
+Authorization: Bearer <access_token>
+```
+
+**Auth:** ✅ JWT Bearer token (admin/superadmin)
+
+**Path Parameters:**
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | UUID ของ customer |
+
+**Request Body:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `action` | string | ✅ | `approve` \| `reject` |
+| `reason` | string | ❌ (แต่บังคับเมื่อ `reject`) | เหตุผลที่ไม่อนุมัติ |
+
+**Response 200:**
+```json
+{
+  "customer": { "id": "uuid", "bankStatus": "approved" },
+  "linePushSent": true
+}
+```
+
+ขึ้นกับ action:
+- **approve:** `bankStatus='approved'`, `bankReviewedAt`/`bankReviewedById` ถูกตั้ง, ล้าง reupload token → LINE push ข้อความ "✅\nข้อมูลบัญชีธนาคารของคุณผ่านการตรวจสอบแล้ว"
+- **reject:** `bankStatus='rejected'`, `bankRejectReason=reason`, สร้าง `bankReuploadToken` (32 hex char) + `bankReuploadTokenExpiresAt=+7วัน` → LINE push ลิงก์อัปโหลดใหม่
+
+> `linePushSent=false` หมายถึงผู้ใช้ยังไม่มี `lineUserId` หรือ push ล้มเหลว (review ยังสำเร็จเสมอ)
+
+---
+
+### Validate Re-upload Token (Public)
+
+```
+GET /api/bank-reupload/validate?token=xxx
+```
+
+**Auth:** ❌ Public
+
+**Query Parameters:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `token` | string | ✅ | Re-upload token จากข้อความ LINE |
+
+**Response 200 (valid):**
+```json
+{
+  "valid": true,
+  "customer": {
+    "id": "uuid",
+    "bankName": "KBANK",
+    "bankAccountName": "สมชาย ใจดี",
+    "bankRejectReason": "เลขบัญชีไม่ถูกต้อง",
+    "bankStatus": "rejected"
+  }
+}
+```
+
+**Response 200 (invalid / expired):**
+```json
+{ "valid": false, "message": "token ไม่ถูกต้องหรือหมดอายุ" }
+```
+
+---
+
+### Re-upload Bank Book via Token (Public)
+
+```
+POST /api/bank-reupload
+Content-Type: multipart/form-data
+```
+
+**Auth:** ❌ Public (ลูกค้าอัปโหลดจากหน้า `/bank-reupload?token=...`)
+
+**FormData Fields:**
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `token` | string | ✅ | Re-upload token |
+| `file` | file | ✅ | รูปสมุดบัญชีใหม่ — ≤5MB, jpeg/png/webp |
+
+**Flow:** ตรวจ token (customer ต้องเป็น `rejected` & ยังไม่หมดอายุ) → upload → ตั้ง `bankBookPath`, `bankStatus='pending'`, ล้าง `bankRejectReason` + token
+
+**Response 201 (updated customer):**
+```json
+{
+  "id": "uuid",
+  "bankBookPath": "bank-books/{customerId}/{timestamp}-{filename}",
+  "bankStatus": "pending",
+  "bankRejectReason": null,
+  "bankReuploadToken": null
 }
 ```
 

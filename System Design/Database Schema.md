@@ -69,6 +69,13 @@ erDiagram
         string bank_name "รหัสธนาคาร"
         string bank_account_name "ชื่อบัญชี"
         string bank_account_number "เลขบัญชี 9-13"
+        text bank_book_path "path ใน Supabase Storage (bank-books bucket)"
+        string bank_status "none | pending | approved | rejected"
+        text bank_reject_reason "เหตุผลเมื่อไม่อนุมัติ"
+        datetime bank_reviewed_at "เวลาที่ admin ตรวจสอบ"
+        uuid bank_reviewed_by "user id ของ admin ที่ตรวจสอบ"
+        string bank_reupload_token "token สำหรับอัปโหลดใหม่ (unique)"
+        datetime bank_reupload_token_expires_at "หมดอายุ 7 วัน"
         uuid referrer_id FK
         uuid placement_upline FK
         string position "left | right"
@@ -228,6 +235,15 @@ CREATE TABLE customers (
   bank_name           VARCHAR(50),            -- รหัสธนาคาร (KBANK, KTB, ...)
   bank_account_name   VARCHAR(100),           -- ชื่อบัญชี
   bank_account_number VARCHAR(20),            -- เลขบัญชี (9-13 หลัก)
+
+  -- Bank account validation workflow
+  bank_book_path              TEXT,                     -- path ใน Supabase Storage
+  bank_status                 VARCHAR(20) DEFAULT 'none', -- none|pending|approved|rejected
+  bank_reject_reason          TEXT,                     -- เหตุผลเมื่อไม่อนุมัติ
+  bank_reviewed_at            TIMESTAMPTZ,              -- เวลาที่ admin ตรวจสอบ
+  bank_reviewed_by            UUID,                     -- user id ของ admin
+  bank_reupload_token         VARCHAR(64) UNIQUE,       -- token อัปโหลดใหม่
+  bank_reupload_token_expires_at TIMESTAMPTZ,           -- หมดอายุ 7 วัน
 
   -- MLM Structure
   referrer_id      UUID REFERENCES customers(id),  -- คนชวน (who refer)

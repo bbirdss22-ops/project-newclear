@@ -203,6 +203,15 @@ created: 2026-07-21
 - [x] **T104** 🟡 Frontend: เพิ่ม section "ข้อมูลบัญชีธนาคาร" (select ธนาคาร + ชื่อบัญชี + เลขบัญชี) ใน register form + ส่งไป API ✅
 - [x] **T105** 🟢 Frontend: แสดง bank info (ธนาคาร/ชื่อบัญชี/เลขบัญชี) ใน customer detail page ✅
 
+### Bank Account Validation Workflow ✅
+- [x] **T106** 🔴 Backend: Customer model เพิ่ม bank validation fields (bankBookPath, bankStatus, bankRejectReason, bankReviewedAt/BY, bankReuploadToken + expiry) + migration `add_bank_validation` ✅
+- [x] **T107** 🔴 Backend: StorageService (Supabase Storage — private bucket `bank-books` ที่มีอยู่แล้ว) + endpoints upload bank-book / bank-book-url / bank-review / bank-reupload validate / bank-reupload ✅
+- [x] **T108** 🔴 BACKEND bank-review: LINE push แจ้งผลผ่าน-ไม่ผ่าน (พร้อมลิงก์ re-upload 7 วัน) 📌 handle กรณีไม่มี lineUserId
+- [x] **T109** 🟡 Frontend: register form file upload รูปสมุดบัญชี + admin bank review UI (ผ่าน/ไม่อนุมัติ + เหตุผล) + หน้า `/bank-reupload` (validate token → แสดงเหตุผล → อัปโหลดใหม่) + badge/filter สถานะ bank ใน customer table/detail ✅
+- [x] **T110** 🟡 Docs: อัปเดต Database Schema + api-reference (endpoints ใหม่) ✅
+
+> Bank account validation workflow (bank book upload to Supabase Storage, admin review, LINE notify, re-upload loop) — done 2026-08-02
+
 > Bank account fields (commission payout) — backend DTO/service/schema + register form + customer detail — done 2026-08-02
 
 ### Documentation
