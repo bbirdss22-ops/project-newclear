@@ -250,6 +250,9 @@ Content-Type: application/json
 | `phone` | string | ✅ | เบอร์โทร (max 20 chars) |
 | `email` | string | ❌ | อีเมล (ต้องมี @ ถ้าให้, max 255 chars) |
 | `address` | string | ❌ | ที่อยู่ |
+| `bankName` | string | ❌ | รหัสธนาคาร (KBANK, KTB, BBL, SCB, BAY, TTB, GSB, BAAC, OTHER) — สำหรับรับค่าคอมมิชชั่น |
+| `bankAccountName` | string | ❌ | ชื่อบัญชี (max 100 chars) |
+| `bankAccountNumber` | string | ❌ | เลขบัญชี — ตัวเลข 9-13 หลัก (regex `/^[0-9]{9,13}$/`) |
 | `lineUserId` | string | ❌ | Line User ID (unique) |
 | `referrerId` | string | ❌ | UUID ของคนชวน (ถ้ามี) |
 
@@ -269,6 +272,9 @@ Content-Type: application/json
   "phone": "0812345678",
   "email": "somchai@test.com",
   "address": null,
+  "bankName": null,
+  "bankAccountName": null,
+  "bankAccountNumber": null,
   "referrerId": null,
   "status": "active",
   "registeredAt": "2026-07-26T10:00:00.000Z",
@@ -337,6 +343,9 @@ GET /api/customers?page=1&pageSize=20
       "phone": "0812345678",
       "email": "somchai@test.com",
       "address": null,
+      "bankName": null,
+      "bankAccountName": null,
+      "bankAccountNumber": null,
       "referrerId": null,
       "status": "active",
       "registeredAt": "2026-07-26T10:00:00.000Z",
@@ -426,6 +435,9 @@ GET /api/customers/:id
   "phone": "0812345678",
   "email": "somchai@test.com",
   "address": null,
+  "bankName": null,
+  "bankAccountName": null,
+  "bankAccountNumber": null,
   "referrerId": null,
   "status": "active",
   "registeredAt": "2026-07-26T10:00:00.000Z",
@@ -491,6 +503,9 @@ Authorization: Bearer <access_token>
 | `phone` | string | ❌ | |
 | `email` | string | ❌ | |
 | `address` | string | ❌ | |
+| `bankName` | string | ❌ | รหัสธนาคาร (KBANK, ...) |
+| `bankAccountName` | string | ❌ | ชื่อบัญชี |
+| `bankAccountNumber` | string | ❌ | เลขบัญชี — ตัวเลข 9-13 หลัก |
 | `lineUserId` | string | ❌ | เช็ค unique ถ้าเปลี่ยน |
 | `referrerId` | string | ❌ | UUID ของ referrer (ใหม่) — validate existence |
 
@@ -709,3 +724,4 @@ User กด "สั่งซื้อสินค้า" → postback data="acti
 | 2026-07-29 | LINE command router (สวัสดี, สินค้า, ติดต่อ, สมัคร) |
 | 2026-07-29 | User Profile auto-create, PUT not PATCH |
 | 2026-07-29 | Swagger UI URL, ValidationPipe info |
+| 2026-08-02 | เพิ่ม optional bank fields (bankName, bankAccountName, bankAccountNumber) ใน create/update customer สำหรับรับค่าคอมมิชชั่น |

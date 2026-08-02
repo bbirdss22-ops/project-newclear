@@ -198,6 +198,13 @@ created: 2026-07-21
 - [ ] **T94** 🟡 Commission Calculation เมื่อ order → paid
 - [ ] **T95** 🟢 API: `GET /api/customers/me/referrals` — ดูคนที่ชวนมา
 
+### Bank Account Fields (Commission Payout) ✅
+- [x] **T103** 🔴 Backend: เพิ่ม bank fields (`bankName`, `bankAccountName`, `bankAccountNumber`) ใน Customer model + migration + DTO (create/update) + service write paths ✅
+- [x] **T104** 🟡 Frontend: เพิ่ม section "ข้อมูลบัญชีธนาคาร" (select ธนาคาร + ชื่อบัญชี + เลขบัญชี) ใน register form + ส่งไป API ✅
+- [x] **T105** 🟢 Frontend: แสดง bank info (ธนาคาร/ชื่อบัญชี/เลขบัญชี) ใน customer detail page ✅
+
+> Bank account fields (commission payout) — backend DTO/service/schema + register form + customer detail — done 2026-08-02
+
 ### Documentation
 - [x] **T96** 🟡 `api-reference.md` — อัปเดตเพิ่ม user-profile + change-password ✅
 - [x] **T97** 🟡 `AGENTS.md` — เพิ่ม Swagger security section + updated endpoint table ✅

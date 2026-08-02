@@ -66,6 +66,9 @@ erDiagram
         string email
         string id_card_number
         text address
+        string bank_name "รหัสธนาคาร"
+        string bank_account_name "ชื่อบัญชี"
+        string bank_account_number "เลขบัญชี 9-13"
         uuid referrer_id FK
         uuid placement_upline FK
         string position "left | right"
@@ -220,6 +223,11 @@ CREATE TABLE customers (
   email           VARCHAR(255),
   id_card_number  VARCHAR(20),                -- สำหรับ verify ตอน MLM
   address         TEXT,
+
+  -- รับค่าคอมมิชชั่น
+  bank_name           VARCHAR(50),            -- รหัสธนาคาร (KBANK, KTB, ...)
+  bank_account_name   VARCHAR(100),           -- ชื่อบัญชี
+  bank_account_number VARCHAR(20),            -- เลขบัญชี (9-13 หลัก)
 
   -- MLM Structure
   referrer_id      UUID REFERENCES customers(id),  -- คนชวน (who refer)
