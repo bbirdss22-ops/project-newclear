@@ -6,7 +6,7 @@ tags:
   - mlm
   - kaset-nuclear
 created: 2026-07-21
-updated: 2026-08-02
+updated: 2026-08-03
 ---
 
 # System Design: Line OA + MLM Platform — เกษตรนิวเคลียร์ 🌿
@@ -112,6 +112,7 @@ graph TB
 |--------|-----------|
 | **AuthModule** | `POST /api/auth/login`, `POST /api/auth/change-password`, `GET/PUT /api/user-profile/me` |
 | **CustomerModule** | `POST /api/customers`, `GET /api/customers` (+ filter bankStatus), `GET /api/customers/search`, `GET /api/customers/:id`, `GET /api/customers/line/:lineUserId`, `PATCH /api/customers/:id` |
+| **UserModule** | `GET /api/users` (paginated, q), `POST /api/users`, `PATCH /api/users/:id` (update + reset password), `DELETE /api/users/:id` — **superadmin only** |
 | **BankModule** | `POST /api/customers/:id/bank-book` (upload รูป), `GET /api/customers/:id/bank-book-url` (admin signed URL), `POST /api/customers/:id/bank-review` (approve/reject + LINE push), `GET /api/bank-reupload/validate?token=`, `POST /api/bank-reupload` (อัปโหลดใหม่) |
 | **LineModule** | `POST /api/line/webhook`, `pushMessage()` |
 | **RegistrationToken** | `POST /api/auth/registration-token/:token/consume` |
@@ -206,6 +207,7 @@ User ส่งข้อความ → LINE Webhook → POST /api/line/webhook
 - [x] **Defect fixes** — postback strip `action=`, stub customer, default fallback removed ✅
 - [x] **Bank Account Fields** — bank_name/bank_account_name/bank_account_number ในฟอร์มสมัคร + customer detail (2026-08-02) ✅
 - [x] **Bank Validation Workflow** — อัปโหลดรูปสมุดบัญชี (Supabase private bucket) + admin ตรวจสอบ + LINE แจ้งผล + ลิงก์อัปโหลดใหม่จนกว่าจะผ่าน (2026-08-02) ✅
+- [x] **User Management (superadmin)** — User CRUD (`GET/POST /api/users`, `PATCH/DELETE /api/users/:id`) + หน้า admin + role-based sidebar/guard (2026-08-03) ✅
 
 ### ⬜ ยังไม่เริ่ม
 - **Customer Referral** — T88-T95 (แนะนำเพื่อน + referral link)

@@ -4,7 +4,7 @@ tags:
   - api
   - documentation
 created: 2026-07-26
-updated: 2026-07-29
+updated: 2026-08-03
 ---
 
 # API Reference — Project Nuclear
@@ -718,6 +718,201 @@ Content-Type: multipart/form-data
 
 ---
 
+## User Management (Superadmin)
+
+> 🔒 ทุก endpoint ในหมวดนี้ **superadmin only** — ใช้ `@Roles('superadmin')` บนฝั่ง backend + frontend guard redirect ไป `/`
+> ข้อมูลที่ส่งกลับ **ไม่รวม `password`** เสมอ
+
+### List Users (Superadmin)
+
+```
+GET /api/users?page=1&pageSize=20&q=admin
+```
+
+**Auth:** ✅ JWT Bearer token (**superadmin only**)
+
+**Query Parameters:**
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `page` | number | 1 | หน้าปัจจุบัน |
+| `pageSize` | number | 20 | จำนวนต่อหน้า (แนะนำให้ใช้) |
+| `limit` | number | 20 | **[Deprecated]** — ใช้ `pageSize` แทน |
+| `q` | string | "" | ค้นหาชื่อผู้ใช้ (username) |
+
+> Priority: `pageSize` > `limit` > default 20 — เรียงโดย `createdAt desc`
+
+**Response 200:**
+```json
+{
+  "data": [
+    {
+      "id": "uuid",
+      "username": "admin1",
+      "role": "superadmin",
+      "createdAt": "2026-08-03T02:00:00.000Z"
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 3,
+  "totalPages": 1,
+  "_links": {
+    "self": "/api/users?page=1&pageSize=20",
+    "next": null,
+    "prev": null
+  }
+}
+```
+
+---
+
+### Create User (Superadmin)
+
+```
+POST /api/users
+```
+
+**Auth:** ✅ JWT Bearer token (**superadmin only**)
+
+**Request Body:**
+```json
+{
+  "username": "admin2",
+  "password": "secret123",
+  "role": "admin"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `username` | string | ✅ | ตัวอักษร/ตัวเลข/`_`/`.`/`-` เท่านั้น, max 50 |
+| `password` | string | ✅ | อย่างน้อย 8 ตัวอักษร, max 100 (hash ด้วย bcrypt) |
+| `role` | string | ❌ default `admin` | `admin` \| `superadmin` |
+
+**Response 201:**
+```json
+{
+  "id": "uuid",
+  "username": "admin2",
+  "role": "admin",
+  "createdAt": "2026-08-03T02:05:00.000Z"
+}
+```
+
+**Response 409 (username ซ้ำ):**
+```json
+{
+  "message": "Username \"admin2\" already exists",
+  "error": "Conflict",
+  "statusCode": 409
+}
+```
+
+**Response 400 (validation):**
+```json
+{
+  "message": ["username must be shorter than or equal to 50 characters"],
+  "error": "Bad Request",
+  "statusCode": 400
+}
+```
+
+---
+
+### Update User / Reset Password (Superadmin)
+
+```
+PATCH /api/users/:id
+```
+
+**Auth:** ✅ JWT Bearer token (**superadmin only**)
+
+**Request Body** (ทุก field optional):
+```json
+{
+  "username": "admin2_edit",
+  "role": "superadmin",
+  "password": "newsecret123"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `username` | string | เปลี่ยนชื่อผู้ใช้ (check ซ้ำ) |
+| `role` | string | `admin` \| `superadmin` |
+| `password` | string | ตั้งรหัสผ่านใหม่ (reset password — ถ้ามี จะ re-hash) |
+
+> ⛔ **ห้ามเปลี่ยน role ของ superadmin คนสุดท้าย** — ถ้า user นี้เป็น superadmin เพียงคนเดียว จะ return 400
+
+**Response 200:**
+```json
+{
+  "id": "uuid",
+  "username": "admin2_edit",
+  "role": "superadmin",
+  "createdAt": "2026-08-03T02:05:00.000Z"
+}
+```
+
+**Response 400 (last superadmin):**
+```json
+{
+  "message": "ไม่สามารถเปลี่ยน role ของ superadmin คนสุดท้ายได้",
+  "error": "Bad Request",
+  "statusCode": 400
+}
+```
+
+**Response 409 (username ซ้ำ):**
+```json
+{
+  "message": "Username \"admin2_edit\" already exists",
+  "error": "Conflict",
+  "statusCode": 409
+}
+```
+
+**Response 404 (ไม่พบ user):**
+```json
+{
+  "message": "User not found",
+  "error": "Not Found",
+  "statusCode": 404
+}
+```
+
+---
+
+### Delete User (Superadmin)
+
+```
+DELETE /api/users/:id
+```
+
+**Auth:** ✅ JWT Bearer token (**superadmin only**)
+
+**Response 200:**
+```json
+{
+  "success": true
+}
+```
+
+> ⛔ **ไม่สามารถลบบัญชีตัวเอง** — ถ้า `:id` เท่ากับ id ของผู้เรียก จะ return 400
+> ⛔ **ไม่สามารถลบ superadmin คนสุดท้าย** — 400
+> userProfile ของ user ที่ลบจะ cascade ไปด้วย (onDelete: Cascade)
+
+**Response 400:**
+```json
+{
+  "message": "ไม่สามารถลบบัญชีตัวเองได้",
+  "error": "Bad Request",
+  "statusCode": 400
+}
+```
+
+---
+
 ## User Profile
 
 ### Get Current User Profile (Protected)
@@ -895,3 +1090,4 @@ User กด "สั่งซื้อสินค้า" → postback data="acti
 | 2026-07-29 | User Profile auto-create, PUT not PATCH |
 | 2026-07-29 | Swagger UI URL, ValidationPipe info |
 | 2026-08-02 | เพิ่ม optional bank fields (bankName, bankAccountName, bankAccountNumber) ใน create/update customer สำหรับรับค่าคอมมิชชั่น |
+| 2026-08-03 | เพิ่ม User Management (superadmin only): `GET/POST /api/users`, `PATCH/DELETE /api/users/:id` |

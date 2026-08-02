@@ -212,6 +212,15 @@ created: 2026-07-21
 - [x] **T111** 🟢 UI fix: เปลี่ยน `Created At` → `Registered At` (แก้ `createdAt` → `registeredAt` — field ที่ API ส่งจริง) ใน customer detail + columns + interface ✅
 - [x] **T112** 🟢 UI fix: รูปสมุดบัญชีทำ lightbox — คลิกดูรูปเต็ม (Dialog + hover hint "🔍 คลิกดูเต็ม") ✅
 
+### User Management (Superadmin) ✅
+- [x] **T113** 🔴 Backend: User CRUD (`GET/POST /api/users`, `PATCH/DELETE /api/users/:id`) — UserModule + controller + service + DTOs, `@Roles('superadmin')` + Swagger เต็ม ✅
+- [x] **T114** 🟡 Frontend: หน้า User Management จริง (แทน demo ด้วย faker) — table username/role/createdAt + Add/Edit/Delete dialog + search + pagination + react-query ✅
+- [x] **T115** 🟡 Role-based visibility: sidebar Users item + route guard — แสดง/เข้าถึงได้เฉพาะ superadmin (redirect ไป `/` ถ้าไม่ใช่) ✅
+- [x] **T116** 🟢 Docs: อัปเดต api-reference + Overview + tasks ✅
+- [x] **T117** 🟢 Protections: ห้ามลบบัญชีตัวเอง + ห้ามลบ/เปลี่ยน role ของ superadmin คนสุดท้าย + จัดการ username ซ้ำ (409 Conflict) ✅
+
+> User management (superadmin) — backend CRUD + frontend page + role guard — done 2026-08-03
+
 > Bank account validation workflow (bank book upload to Supabase Storage, admin review, LINE notify, re-upload loop) — done 2026-08-02
 
 > Bank account fields (commission payout) — backend DTO/service/schema + register form + customer detail — done 2026-08-02
