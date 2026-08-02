@@ -209,6 +209,8 @@ created: 2026-07-21
 - [x] **T108** 🔴 BACKEND bank-review: LINE push แจ้งผลผ่าน-ไม่ผ่าน (พร้อมลิงก์ re-upload 7 วัน) 📌 handle กรณีไม่มี lineUserId
 - [x] **T109** 🟡 Frontend: register form file upload รูปสมุดบัญชี + admin bank review UI (ผ่าน/ไม่อนุมัติ + เหตุผล) + หน้า `/bank-reupload` (validate token → แสดงเหตุผล → อัปโหลดใหม่) + badge/filter สถานะ bank ใน customer table/detail ✅
 - [x] **T110** 🟡 Docs: อัปเดต Database Schema + api-reference (endpoints ใหม่) ✅
+- [x] **T111** 🟢 UI fix: เปลี่ยน `Created At` → `Registered At` (แก้ `createdAt` → `registeredAt` — field ที่ API ส่งจริง) ใน customer detail + columns + interface ✅
+- [x] **T112** 🟢 UI fix: รูปสมุดบัญชีทำ lightbox — คลิกดูรูปเต็ม (Dialog + hover hint "🔍 คลิกดูเต็ม") ✅
 
 > Bank account validation workflow (bank book upload to Supabase Storage, admin review, LINE notify, re-upload loop) — done 2026-08-02
 
