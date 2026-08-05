@@ -265,6 +265,24 @@ created: 2026-07-21
 - [x] **T130** 🟡 Frontend: Customers table เพิ่ม column "จัดการ" — แก้ไข (Dialog), ลบ (AlertDialog confirm + soft delete), ส่งลิงก์ re-upload (confirm + toast ผล) — พร้อม `stopPropagation` บนปุ่ม row action ✅
 - [x] **T131** 🟡 Frontend: `api.ts` เพิ่ม `getRegistrationStats`, `deleteCustomer`, `sendBankReupload` + types ✅
 
+### UI Adjustments 🟢
+
+> ฟีเจอร์: ปรับ UX หลัง dashboard/customer actions — done 2026-08-05 (commit `231129c` web master)
+
+- [x] **T132** 🟡 Frontend: ย้ายปุ่ม "ส่งลิงก์อัปโหลดสมุดบัญชี" จากตาราง → หน้า customer detail (ส่วนบัญชีธนาคาร, มี AlertDialog confirm + toast) ✅
+- [x] **T133** 🟡 Frontend: เพิ่มคอลัมน์ "รหัสลูกค้า" (`code` NC#####, null → `-`) เป็นคอลัมน์แรกในตาราง ✅
+- [x] **T134** 🟢 Frontend: ลบปุ่ม Download + tab select ออกจาก dashboard — แสดง `RegistrationStats` ตรงๆ + ลบ import ไม่ใช้ (build ผ่าน) ✅
+
+### Backend Chore 🟢
+
+> งานบำรุง — done 2026-08-05 (commit `0f75be4` api main)
+
+- [x] **T135** 🟢 Backend: ลบ admin seeder (`prisma/seed.ts` + `seedAdminUsers()` ใน `prisma.service.ts`) — เลิกสร้าง/รีเซ็ต admin1-5 (password `admin123`) ทุก boot; ข้อมูล admin ใน DB ไม่ถูกแตะ ✅
+
+### Known Issues ⚠️
+
+- [ ] **BUG** CORS error ตอน update customer (web→api) — สืบแล้ว: server CORS config ถูกต้อง (preflight 204 + `allow-origin: *`), bundle ที่ deploy ส่ง PATCH ถูกต้อง; อาการ "Provisional headers are shown" = request ถูก block ก่อนส่ง → สงสัย **Render free tier cold start** (instance sleep หลัง idle 15 นาที → Cloudflare ตอบ error page ไม่มี CORS headers) — รอ user ยืนยัน (ลอง update ตอนนี้ / ดู status column + console) — ทางแก้: upgrade tier หรือ keep-alive cron
+
 ---
 
 ## 📦 S6: Deploy (1 วัน)
@@ -342,7 +360,7 @@ Mon  Tue  Wed  Thu  Fri   |  Mon  Tue  Wed  Thu  Fri
 🟡 P1 = 25 tasks (important — should have)
 🟢 P2 = 13 tasks (enhancement — nice to have)
 
-**รวม: 87 tasks + T118-T125 (RBAC)** | S1-S6 ✅ | S7 + S8 (referral/RBAC) remaining
+**รวม: 87 tasks + T118-T125 (RBAC) + T126-T135** | S1-S6 ✅ | S7 + S8 (referral/RBAC) remaining
 ```
 
 ดูเพิ่มเติม: [[Phase 1 Plan]]
