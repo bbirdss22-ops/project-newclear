@@ -254,6 +254,17 @@ created: 2026-07-21
 - [x] Customer Code auto-gen + LINE push ✅
 - [ ] Customer Referral link + invite flow ⬜
 
+### Dashboard Stats + Customer Actions 🟢
+
+> ฟีเจอร์: แดชบอร์ดแสดงสถิติสมัครสมาชิกจริง (แทน mock) + Customer page มี action แก้ไข/ลบ/ส่งลิงก์อัปโหลดสมุดบัญชี — done 2026-08-05
+
+- [x] **T126** 🔴 Backend: `GET /api/customers/stats/registrations` (daily/monthly/yearly) group by `registeredAt`, default 30d/12mo/5yr, filter `status != deleted` ✅
+- [x] **T127** 🔴 Backend: `DELETE /api/customers/:id` — soft delete (ตั้ง `status='deleted'`) + filter ใน `findAll()`/`search()`/`findByLineUserId()` ✅
+- [x] **T128** 🔴 Backend: `POST /api/customers/:id/bank-reupload-send` — สร้าง reupload token (randomBytes 24 hex, expiry 7 วัน) + push LINE ลิงก์; คืน `{ sent:false }` ถ้าไม่มี Line ID (ไม่ throw) ✅
+- [x] **T129** 🟡 Frontend: Dashboard cards ลูกค้าวันนี้/เดือนนี้/ปีนี้/รวม + date range (preset วันนี้/7 วัน/30 วัน/กำหนดเอง) + period toggle (รายวัน/เดือน/ปี) + recharts bar chart (แทน mock revenue cards) ✅
+- [x] **T130** 🟡 Frontend: Customers table เพิ่ม column "จัดการ" — แก้ไข (Dialog), ลบ (AlertDialog confirm + soft delete), ส่งลิงก์ re-upload (confirm + toast ผล) — พร้อม `stopPropagation` บนปุ่ม row action ✅
+- [x] **T131** 🟡 Frontend: `api.ts` เพิ่ม `getRegistrationStats`, `deleteCustomer`, `sendBankReupload` + types ✅
+
 ---
 
 ## 📦 S6: Deploy (1 วัน)
