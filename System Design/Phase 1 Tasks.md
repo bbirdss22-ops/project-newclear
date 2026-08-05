@@ -225,6 +225,19 @@ created: 2026-07-21
 
 > Bank account fields (commission payout) — backend DTO/service/schema + register form + customer detail — done 2026-08-02
 
+### Role Based Access Control (RBAC) ⬜
+
+> Design: [[RBAC Design]] — Role → Permission model, Option A (code-defined map), 4 roles (superadmin/admin/finance/support), SoD: bank:review ≠ payouts:approve
+
+- [ ] **T118** 🔴 Backend: `permissions.ts` (enum Role + ROLE_PERMISSIONS map) + `PermissionsGuard` + `@RequirePermissions` decorator
+- [ ] **T119** 🔴 Backend: เปลี่ยน controllers ใช้ `@RequirePermissions` (แทน `@Roles` string เทียบตรง)
+- [ ] **T120** 🔴 Backend: login response + `GET /user-profile/me` คืน `user.permissions`
+- [ ] **T121** 🟡 Backend: unit tests — guard อนุญาต/ปฏิเสธตาม permission matrix
+- [ ] **T122** 🔴 Frontend: `auth-store` เก็บ permissions + `hasPermission()` + route guards ใช้ permission
+- [ ] **T123** 🟡 Frontend: sidebar + command menu filter ด้วย permission (แทน role เทียบตรง)
+- [ ] **T124** 🟡 Frontend: `<Can>` component + redirect ไปหน้า `/403` (แทน silent redirect หน้าแรก)
+- [ ] **T125** 🟢 Docs: อัปเดต api-reference + AGENTS.md + tasks
+
 ### Documentation
 - [x] **T96** 🟡 `api-reference.md` — อัปเดตเพิ่ม user-profile + change-password ✅
 - [x] **T97** 🟡 `AGENTS.md` — เพิ่ม Swagger security section + updated endpoint table ✅
@@ -318,7 +331,7 @@ Mon  Tue  Wed  Thu  Fri   |  Mon  Tue  Wed  Thu  Fri
 🟡 P1 = 25 tasks (important — should have)
 🟢 P2 = 13 tasks (enhancement — nice to have)
 
-**รวม: 87 tasks** | S1-S6 + S8 ✅ | S7 remaining
+**รวม: 87 tasks + T118-T125 (RBAC)** | S1-S6 ✅ | S7 + S8 (referral/RBAC) remaining
 ```
 
 ดูเพิ่มเติม: [[Phase 1 Plan]]
