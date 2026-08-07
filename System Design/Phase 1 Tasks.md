@@ -294,6 +294,13 @@ created: 2026-07-21
 
 > หมายเหตุเพิ่มเติมจาก load test: `admin1` login ไม่ได้แล้ว (เหลือ admin3/4/5, password `admin123`) — ควรตรวจบัญชี admin ใน DB
 
+### Register Flow — Phone Unique + Shipping Notice 🟡
+
+> เพิ่มความเข้มงวด/ความชัดเจนตอนสมัคร — 2026-08-07
+
+- [ ] **T140** 🔴 Backend: เบอร์มือถือห้ามซ้ำ — เพิ่ม unique constraint บน `phone` (Prisma migration) + ตรวจซ้ำใน `CreateCustomerDto`/`CustomerService.createCustomer()` → ตอบ 409 พร้อม error message ชัดเจน; Frontend แสดง error ที่ field เบอร์โทร (ไม่ใช่ generic)
+- [ ] **T141** 🟡 Frontend: เพิ่มข้อความใต้ field ที่อยู่ (helper text) — "ที่อยู่และเบอร์โทรนี้จะใช้ในการจัดส่งสินค้า" เพื่อให้ลูกค้ารู้ว่าจะใช้ข้อมูลนี้จัดส่ง (register form)
+
 ---
 
 ## 📦 S6: Deploy (1 วัน)
