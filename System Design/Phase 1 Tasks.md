@@ -287,8 +287,8 @@ created: 2026-07-21
 
 > จาก load test 2026-08-07 (ดู [[2026-08-07-load-test-performance]]) — `GET /api/customers` ช้ากว่า detail ทุกรอบ (ข้อมูลแค่ 4 รายการ แต่ p95 ~800ms-1.3s ที่ conc 10-15) → bottleneck อยู่ที่ query เอง ไม่ใช่ Render/Neon — อัปเกรด infra ไม่คุ้ม
 
-- [ ] **T136** 🔴 Backend: profile & optimize `GET /api/customers` (`CustomerService.findAll()`) — แยกวัด count query vs pagination vs `placementUpline`/`treePath` computation, กำจัด N+1 / recursive scan
-- [ ] **T137** 🟡 Backend: เช็ค/เพิ่ม index บน `code` / `status` / `registeredAt` (Prisma migration ถ้าจำเป็น)
+- [x] **T136** 🔴 Backend: profile & optimize `GET /api/customers` (`CustomerService.findAll()`) — แยกวัด count query vs pagination vs `placementUpline`/`treePath` computation, กำจัด N+1 / recursive scan ✅ (commit `f1803cd`)
+- [x] **T137** 🟡 Backend: เช็ค/เพิ่ม index บน `code` / `status` / `registeredAt` (Prisma migration ถ้าจำเป็น) ✅ (migration `customers_status_idx` + `customers_registered_at_idx` — apply กับ production แล้ว)
 - [ ] **T138** 🟡 Re-run load test (`loadtest_nuclear.js`) หลัง optimize — เป้าหมาย: list p95 < 300ms ที่ conc 10-15
 - [ ] **T139** 🟢 Docs: อัปเดตผล load test หลัง optimize ใน [[2026-08-07-load-test-performance]]
 
@@ -298,14 +298,14 @@ created: 2026-07-21
 
 > เพิ่มความเข้มงวด/ความชัดเจนตอนสมัคร — 2026-08-07
 
-- [ ] **T140** 🔴 Backend: เบอร์มือถือห้ามซ้ำ — เพิ่ม unique constraint บน `phone` (Prisma migration) + ตรวจซ้ำใน `CreateCustomerDto`/`CustomerService.createCustomer()` → ตอบ 409 พร้อม error message ชัดเจน; Frontend แสดง error ที่ field เบอร์โทร (ไม่ใช่ generic)
-- [ ] **T141** 🟡 Frontend: เพิ่มข้อความใต้ field ที่อยู่ (helper text) — "ที่อยู่และเบอร์โทรนี้จะใช้ในการจัดส่งสินค้า" เพื่อให้ลูกค้ารู้ว่าจะใช้ข้อมูลนี้จัดส่ง (register form)
+- [x] **T140** 🔴 เบอร์มือถือห้ามซ้ำ — unique constraint บน `phone` (Prisma migration) + ตรวจซ้ำใน `CustomerService.create()` → ตอบ 409 พร้อม error message + จัดการ P2002 (กัน race); Frontend แสดง error ที่ field เบอร์โทร ✅ (backend `f1803cd` + frontend `2d51334`)
+- [x] **T141** 🟡 Frontend: เพิ่มข้อความใต้ field ที่อยู่ (helper text) — "ที่อยู่และเบอร์โทรนี้จะใช้ในการจัดส่งสินค้า" เพื่อให้ลูกค้ารู้ว่าจะใช้ข้อมูลนี้จัดส่ง (register form) ✅ (commit `2d51334`)
 
 ### Gift Flow — แจกของสมนาคุณ 🎁
 
 > Flow: สมัคร → ได้รหัส NC0000x → LINE แจ้ง + ลิงก์ Google Form → ลูกค้ากรอก (รหัส + พืชที่ปลูก) → บริษัทจัดส่งของตามที่อยู่/เบอร์ที่สมัคร (ดู [[2026-08-07-register-gift-flow]])
 
-- [ ] **T142** 🔴 Backend: LINE push หลังสมัครสำเร็จ — เพิ่มลิงก์ Google Form ในข้อความ (ถัดจากรหัสสมาชิก) — config `GIFT_FORM_URL` ใน env
+- [x] **T142** 🔴 LINE push หลังสมัครสำเร็จ — เพิ่มลิงก์ Google Form ในข้อความ (ถัดจากรหัสสมาชิก) — config `GIFT_FORM_URL` ใน env ✅ (commit `f1803cd` — ตั้ง env บน Render เพื่อเปิดใช้งาน)
 - [ ] **T143** 🟡 (ตัดสินใจ) ข้อมูลจาก Google Form อยู่นอกระบบ — บริษัท export เอง หรือสร้างฟอร์มในแอปเพื่อเก็บ `registered plants` เข้า DB
 - [ ] **T144** 🟢 (ตัดสินใจ) สถานะส่งของ (ส่งแล้ว/ยัง) — ต้องมี tracking ไหม (รู้ว่าใครยังไม่ได้ของ)
 
