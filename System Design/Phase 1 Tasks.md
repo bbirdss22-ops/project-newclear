@@ -313,7 +313,9 @@ created: 2026-07-21
 
 > เพิ่ม 2026-08-07 — หลังลูกค้าสมัครสมาชิก ให้ LINE ส่งรูปกิจกรรม (activity image) ด้วย
 
-- [ ] **T145** 🟡 Backend: LINE push รูปกิจกรรมหลังสมัครสำเร็จ — ตั้งค่าผ่าน env `ACTIVITY_IMAGE_URL` (URL รูปภาพ); **ถ้ามีค่า → ส่งเป็น image message ตามด้วยข้อความแจ้งรหัสสมาชิก / ถ้าไม่มี → ข้าม ไม่ต้องส่ง** (push ข้อความเดิมตามปกติ ไม่พัง)
+- [x] **T145** 🟡 Backend: LINE push รูปกิจกรรมหลังสมัครสำเร็จ — set ผ่าน env `ACTIVITY_IMAGE_URL` ✅ (commit `67d384c`) — **ถ้ามีค่า** → ส่ง image message + ข้อความแจ้งรหัส / **ถ้าไม่มี** → ข้าม (text อย่างเดียว ไม่พัง)
+  - การ implement: `LineService.pushMessage()` รองรับ array messages (image + text), เพิ่ม `pushWelcome()` อ่าน env เอง, controller เรียก `pushWelcome()` — รองรับ `ACTIVITY_IMAGE_PREVIEW_URL` แยก (LINE บังคับ preview ≤ 240×240) fallback ใช้ URL เดียวกับรูปใหญ่
+  - **การ host รูป (เลือกแล้ว): Supabase Storage public bucket** — สร้าง bucket `activity` (public) → อัปโหลดรูป → ใช้ URL `https://<project>.supabase.co/storage/v1/object/public/activity/<file>.jpg` ไปใส่ใน Render env `ACTIVITY_IMAGE_URL`
   - รายละเอียด: ใช้ LINE Messaging API `type: 'image'` (`originalContentUrl` + `previewImageUrl` ใช้ค่าเดียวกัน) — ต่อ `messages` array ใน `pushMessage`/`replyMessage` — ดูว่า `LineService.pushMessage()` รองรับ array messages ไหม ถ้าไม่ ต้องปรับ (ตอนนี้รับ `text: string` อย่างเดียว)
   - env: เพิ่ม `ACTIVITY_IMAGE_URL=` ใน `.env.example` — ไม่ commit ค่าจริง
 
