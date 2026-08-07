@@ -337,7 +337,7 @@ created: 2026-07-21
   - ดาวน์โหลด `banks.json` (จาก AomDEV/css-finances — มี **34 ธนาคาร**: BBL, KBANK, KTB, SCB, BAY, TTB, GSB, BAAC, UOB, TISCO, KK, ICBC, TBANK ฯลฯ) → เก็บใน repo web เช่น `src/data/banks.json` (หรือ `public/banks.json`) แล้ว commit ขึ้น GitHub เรา
   - ใช้ key **uppercase** เป็น value (เช่น `KBANK`, `SCB`) และ **`thai_name`** เป็น label (เช่น "ธนาคารกสิกรไทย")
   - แก้ `src/features/register/register-form.tsx` (ตอนนี้ hardcode 8 ตัว + OTHER ที่บรรทัด ~303-311) → render `SelectItem` จาก banks.json แบบ loop
-  - ครอบคลุม list เดิมครบทุกตัว (KBANK/KTB/BBL/SCB/BAY/TTB/GSB/BAAC) — เพิ่มเติม: ตัดสินใจเรื่องตัวเลือก `OTHER` (อื่นๆ) — banks.json ไม่มี → จะเก็บต่อท้ายไว้ไหม หรือตัดทิ้ง (ถาม user)
+  - ครอบคลุม list เดิมครบทุกตัว (KBANK/KTB/BBL/SCB/BAY/TTB/GSB/BAAC) — **ตัดสินใจแล้ว (2026-08-07): ตัดตัวเลือก `OTHER` (อื่นๆ) ทิ้ง** และ **label ใช้ `thai_name` เต็มรูปแบบ** (เช่น "ธนาคารกสิกรไทย" ไม่ใช่ "กสิกรไทย")
   - ตรวจ: `npm run build` ผ่าน + push (web `master`)
 
 ---
