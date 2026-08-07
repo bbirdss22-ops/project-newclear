@@ -281,7 +281,7 @@ created: 2026-07-21
 
 ### Known Issues ⚠️
 
-- [ ] **BUG** CORS error ตอน update customer (web→api) — สืบแล้ว: server CORS config ถูกต้อง (preflight 204 + `allow-origin: *`), bundle ที่ deploy ส่ง PATCH ถูกต้อง; อาการ "Provisional headers are shown" = request ถูก block ก่อนส่ง → สงสัย **Render free tier cold start** (instance sleep หลัง idle 15 นาที → Cloudflare ตอบ error page ไม่มี CORS headers) — รอ user ยืนยัน (ลอง update ตอนนี้ / ดู status column + console) — ทางแก้: upgrade tier หรือ keep-alive cron
+- [x] **BUG** CORS error ตอน update customer (web→api) — สืบแล้ว: server CORS config ถูกต้อง (preflight 204 + `allow-origin: *`), bundle ที่ deploy ส่ง PATCH ถูกต้อง; อาการ "Provisional headers are shown" = request ถูก block ก่อนส่ง → สาเหตุจริงคือ **Render free tier cold start** (instance sleep หลัง idle 15 นาที → ตอบ error page ไม่มี CORS headers) ✅ **ปิดแล้ว** — user ยืนยัน 2026-08-07 ว่าหายแล้ว (ไม่ใช่ code bug) — ทางกันกลับ: upgrade tier หรือ keep-alive cron ถ้าเจออีก
 
 ---
 
