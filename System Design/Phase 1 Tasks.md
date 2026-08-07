@@ -283,6 +283,17 @@ created: 2026-07-21
 
 - [x] **BUG** CORS error ตอน update customer (web→api) — สืบแล้ว: server CORS config ถูกต้อง (preflight 204 + `allow-origin: *`), bundle ที่ deploy ส่ง PATCH ถูกต้อง; อาการ "Provisional headers are shown" = request ถูก block ก่อนส่ง → สาเหตุจริงคือ **Render free tier cold start** (instance sleep หลัง idle 15 นาที → ตอบ error page ไม่มี CORS headers) ✅ **ปิดแล้ว** — user ยืนยัน 2026-08-07 ว่าหายแล้ว (ไม่ใช่ code bug) — ทางกันกลับ: upgrade tier หรือ keep-alive cron ถ้าเจออีก
 
+### Performance: Customer List Query 🟡
+
+> จาก load test 2026-08-07 (ดู [[2026-08-07-load-test-performance]]) — `GET /api/customers` ช้ากว่า detail ทุกรอบ (ข้อมูลแค่ 4 รายการ แต่ p95 ~800ms-1.3s ที่ conc 10-15) → bottleneck อยู่ที่ query เอง ไม่ใช่ Render/Neon — อัปเกรด infra ไม่คุ้ม
+
+- [ ] **T136** 🔴 Backend: profile & optimize `GET /api/customers` (`CustomerService.findAll()`) — แยกวัด count query vs pagination vs `placementUpline`/`treePath` computation, กำจัด N+1 / recursive scan
+- [ ] **T137** 🟡 Backend: เช็ค/เพิ่ม index บน `code` / `status` / `registeredAt` (Prisma migration ถ้าจำเป็น)
+- [ ] **T138** 🟡 Re-run load test (`loadtest_nuclear.js`) หลัง optimize — เป้าหมาย: list p95 < 300ms ที่ conc 10-15
+- [ ] **T139** 🟢 Docs: อัปเดตผล load test หลัง optimize ใน [[2026-08-07-load-test-performance]]
+
+> หมายเหตุเพิ่มเติมจาก load test: `admin1` login ไม่ได้แล้ว (เหลือ admin3/4/5, password `admin123`) — ควรตรวจบัญชี admin ใน DB
+
 ---
 
 ## 📦 S6: Deploy (1 วัน)
