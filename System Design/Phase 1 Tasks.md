@@ -309,6 +309,14 @@ created: 2026-07-21
 - [ ] **T143** 🟡 (ตัดสินใจ) ข้อมูลจาก Google Form อยู่นอกระบบ — บริษัท export เอง หรือสร้างฟอร์มในแอปเพื่อเก็บ `registered plants` เข้า DB
 - [ ] **T144** 🟢 (ตัดสินใจ) สถานะส่งของ (ส่งแล้ว/ยัง) — ต้องมี tracking ไหม (รู้ว่าใครยังไม่ได้ของ)
 
+### LINE Push — รูปกิจกรรมหลังสมัคร 🖼️
+
+> เพิ่ม 2026-08-07 — หลังลูกค้าสมัครสมาชิก ให้ LINE ส่งรูปกิจกรรม (activity image) ด้วย
+
+- [ ] **T145** 🟡 Backend: LINE push รูปกิจกรรมหลังสมัครสำเร็จ — ตั้งค่าผ่าน env `ACTIVITY_IMAGE_URL` (URL รูปภาพ); **ถ้ามีค่า → ส่งเป็น image message ตามด้วยข้อความแจ้งรหัสสมาชิก / ถ้าไม่มี → ข้าม ไม่ต้องส่ง** (push ข้อความเดิมตามปกติ ไม่พัง)
+  - รายละเอียด: ใช้ LINE Messaging API `type: 'image'` (`originalContentUrl` + `previewImageUrl` ใช้ค่าเดียวกัน) — ต่อ `messages` array ใน `pushMessage`/`replyMessage` — ดูว่า `LineService.pushMessage()` รองรับ array messages ไหม ถ้าไม่ ต้องปรับ (ตอนนี้รับ `text: string` อย่างเดียว)
+  - env: เพิ่ม `ACTIVITY_IMAGE_URL=` ใน `.env.example` — ไม่ commit ค่าจริง
+
 ---
 
 ## 📦 S6: Deploy (1 วัน)
