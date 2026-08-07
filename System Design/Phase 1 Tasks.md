@@ -289,8 +289,6 @@ created: 2026-07-21
 
 - [x] **T136** 🔴 Backend: profile & optimize `GET /api/customers` (`CustomerService.findAll()`) — แยกวัด count query vs pagination vs `placementUpline`/`treePath` computation, กำจัด N+1 / recursive scan ✅ (commit `f1803cd`)
 - [x] **T137** 🟡 Backend: เช็ค/เพิ่ม index บน `code` / `status` / `registeredAt` (Prisma migration ถ้าจำเป็น) ✅ (migration `customers_status_idx` + `customers_registered_at_idx` — apply กับ production แล้ว)
-- [ ] **T138** 🟡 Re-run load test (`loadtest_nuclear.js`) หลัง optimize — เป้าหมาย: list p95 < 300ms ที่ conc 10-15
-- [ ] **T139** 🟢 Docs: อัปเดตผล load test หลัง optimize ใน [[2026-08-07-load-test-performance]]
 
 > หมายเหตุเพิ่มเติมจาก load test: `admin1` login ไม่ได้แล้ว (เหลือ admin3/4/5, password `admin123`) — ควรตรวจบัญชี admin ใน DB
 
@@ -307,7 +305,6 @@ created: 2026-07-21
 
 - [x] ~~**T142**~~ ~~LINE push หลังสมัครสำเร็จ — เพิ่มลิงก์ Google Form~~ — ✖️ **ยกเลิกตามคำขอ user (2026-08-07)** — revert commit `cc1f252` (ลบ `GIFT_FORM_URL` ออกจากโค้ด + env แล้ว)
 - [ ] ~~**T143**~~ ~~(ตัดสินใจ) ข้อมูลจาก Google Form อยู่นอกระบบ~~ — ✅ **ตัดสินใจแล้ว (2026-08-07): เลือกเก็บในแอปแทน** — ดู T146 (field `พืชที่ปลูก` ใน register form + customer detail)
-- [ ] **T144** 🟢 (ตัดสินใจ) สถานะส่งของ (ส่งแล้ว/ยัง) — ต้องมี tracking ไหม (รู้ว่าใครยังไม่ได้ของ)
 
 ### LINE Push — รูปกิจกรรมหลังสมัคร 🖼️
 
