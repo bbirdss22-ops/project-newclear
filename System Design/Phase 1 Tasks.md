@@ -306,7 +306,7 @@ created: 2026-07-21
 > Flow: สมัคร → ได้รหัส NC0000x → LINE แจ้ง + ลิงก์ Google Form → ลูกค้ากรอก (รหัส + พืชที่ปลูก) → บริษัทจัดส่งของตามที่อยู่/เบอร์ที่สมัคร (ดู [[2026-08-07-register-gift-flow]])
 
 - [x] ~~**T142**~~ ~~LINE push หลังสมัครสำเร็จ — เพิ่มลิงก์ Google Form~~ — ✖️ **ยกเลิกตามคำขอ user (2026-08-07)** — revert commit `cc1f252` (ลบ `GIFT_FORM_URL` ออกจากโค้ด + env แล้ว)
-- [ ] **T143** 🟡 (ตัดสินใจ) ข้อมูลจาก Google Form อยู่นอกระบบ — บริษัท export เอง หรือสร้างฟอร์มในแอปเพื่อเก็บ `registered plants` เข้า DB
+- [ ] ~~**T143**~~ ~~(ตัดสินใจ) ข้อมูลจาก Google Form อยู่นอกระบบ~~ — ✅ **ตัดสินใจแล้ว (2026-08-07): เลือกเก็บในแอปแทน** — ดู T146 (field `พืชที่ปลูก` ใน register form + customer detail)
 - [ ] **T144** 🟢 (ตัดสินใจ) สถานะส่งของ (ส่งแล้ว/ยัง) — ต้องมี tracking ไหม (รู้ว่าใครยังไม่ได้ของ)
 
 ### LINE Push — รูปกิจกรรมหลังสมัคร 🖼️
@@ -318,6 +318,16 @@ created: 2026-07-21
   - **การ host รูป (เลือกแล้ว): Supabase Storage public bucket** — สร้าง bucket `activity` (public) → อัปโหลดรูป → ใช้ URL `https://<project>.supabase.co/storage/v1/object/public/activity/<file>.jpg` ไปใส่ใน Render env `ACTIVITY_IMAGE_URL`
   - รายละเอียด: ใช้ LINE Messaging API `type: 'image'` (`originalContentUrl` + `previewImageUrl` ใช้ค่าเดียวกัน) — ต่อ `messages` array ใน `pushMessage`/`replyMessage` — ดูว่า `LineService.pushMessage()` รองรับ array messages ไหม ถ้าไม่ ต้องปรับ (ตอนนี้รับ `text: string` อย่างเดียว)
   - env: เพิ่ม `ACTIVITY_IMAGE_URL=` ใน `.env.example` — ไม่ commit ค่าจริง
+
+### Customer — พืชที่ปลูก 🌱
+
+> เพิ่ม 2026-08-07 — เก็บข้อมูล "ลูกค้าปลูกอะไร" เข้าระบบโดยตรง (แทน Google Form — ตัดสินใจปิด T143)
+
+- [ ] **T146** 🟡 เก็บ field `พืชที่ปลูก` (optional) — หน้า สมัครสมาชิก + แสดงใน customer detail
+  - Backend: เพิ่ม column `plants` (String? / Text) ใน `Customer` (Prisma schema + migration) → `CreateCustomerDto` + `UpdateCustomerDto` เพิ่ม `plants?` optional → response ของ `POST /api/customers` + `GET /api/customers/{id}` มี field นี้ด้วย
+  - Frontend (web): หน้า register form เพิ่ม field `พืชที่ปลูก` (optional — placeholder เช่น "ข้าว, มะม่วง, ผักสวนครัว" หรือ textarea) → ส่ง `plants` ใน payload
+  - Frontend (web): หน้า customer detail แสดง "พืชที่ปลูก" (ถ้ามีค่า — ถ้าไม่มีไม่ต้องแสดง/hide)
+  - ตรวจ: tsc/build ผ่านทั้ง 2 repo + push (api `main`, web `master`)
 
 ---
 
