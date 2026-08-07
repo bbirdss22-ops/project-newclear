@@ -323,22 +323,22 @@ created: 2026-07-21
 
 > เพิ่ม 2026-08-07 — เก็บข้อมูล "ลูกค้าปลูกอะไร" เข้าระบบโดยตรง (แทน Google Form — ตัดสินใจปิด T143)
 
-- [ ] **T146** 🟡 เก็บ field `พืชที่ปลูก` (optional) — หน้า สมัครสมาชิก + แสดงใน customer detail
-  - Backend: เพิ่ม column `plants` (String? / Text) ใน `Customer` (Prisma schema + migration) → `CreateCustomerDto` + `UpdateCustomerDto` เพิ่ม `plants?` optional → response ของ `POST /api/customers` + `GET /api/customers/{id}` มี field นี้ด้วย
-  - Frontend (web): หน้า register form เพิ่ม field `พืชที่ปลูก` (optional — placeholder เช่น "ข้าว, มะม่วง, ผักสวนครัว" หรือ textarea) → ส่ง `plants` ใน payload
-  - Frontend (web): หน้า customer detail แสดง "พืชที่ปลูก" (ถ้ามีค่า — ถ้าไม่มีไม่ต้องแสดง/hide)
-  - ตรวจ: tsc/build ผ่านทั้ง 2 repo + push (api `main`, web `master`)
+- [x] **T146** 🟡 เก็บ field `พืชที่ปลูก` (optional) — หน้า สมัครสมาชิก + แสดงใน customer detail ✅ (backend `a7f067b` + frontend `710413fe`)
+  - Backend: เพิ่ม column `plants` (Text, nullable) ใน `Customer` (Prisma schema + migration `customer_plants` — **apply กับ production Neon แล้ว** ใช้ direct connection string) → `CreateCustomerDto` + `UpdateCustomerDto` เพิ่ม `plants?` optional → `CUSTOMER_LIST_SELECT` + create/update service + response มี field นี้ครบ
+  - Frontend (web): หน้า register form เพิ่ม field `พืชที่ปลูก` (textarea optional — placeholder "ข้าว, มะม่วง, ผักสวนครัว") → ส่ง `plants` ใน payload
+  - Frontend (web): หน้า customer detail แสดง "พืชที่ปลูก" (conditional — ถ้ามีค่าถึงจะโชว์)
+  - ตรวจ: tsc/build ผ่านทั้ง 2 repo + push (api `main` `a7f067b`, web `master` `710413fe`) — lint 18 problems เป็น pre-existing ไม่เกี่ยวกับงานนี้
 
 ### Register — Bank List จาก banks.json 🏦
 
 > เพิ่ม 2026-08-07 — ใช้ list ธนาคารจริงจาก https://github.com/AomDEV/css-finances/blob/main/banks.json (โหลดมาไว้ใน repo เรา) — **key (uppercase) = value, `thai_name` = label**
 
-- [ ] **T147** 🟡 Frontend (web): เปลี่ยน bank list ในหน้าสมัครสมาชิกจาก hardcode → ใช้ banks.json
-  - ดาวน์โหลด `banks.json` (จาก AomDEV/css-finances — มี **34 ธนาคาร**: BBL, KBANK, KTB, SCB, BAY, TTB, GSB, BAAC, UOB, TISCO, KK, ICBC, TBANK ฯลฯ) → เก็บใน repo web เช่น `src/data/banks.json` (หรือ `public/banks.json`) แล้ว commit ขึ้น GitHub เรา
+- [x] **T147** 🟡 Frontend (web): เปลี่ยน bank list ในหน้าสมัครสมาชิกจาก hardcode → ใช้ banks.json ✅ (commit `710413fe`)
+  - ดาวน์โหลด `banks.json` (จาก AomDEV/css-finances — **34 ธนาคาร**) → เก็บใน repo web เป็น `src/data/banks.ts` (tsconfig ไม่มี resolveJsonModule เลย export array ผ่าน .ts แทน) แล้ว commit ขึ้น GitHub เรา
   - ใช้ key **uppercase** เป็น value (เช่น `KBANK`, `SCB`) และ **`thai_name`** เป็น label (เช่น "ธนาคารกสิกรไทย")
-  - แก้ `src/features/register/register-form.tsx` (ตอนนี้ hardcode 8 ตัว + OTHER ที่บรรทัด ~303-311) → render `SelectItem` จาก banks.json แบบ loop
-  - ครอบคลุม list เดิมครบทุกตัว (KBANK/KTB/BBL/SCB/BAY/TTB/GSB/BAAC) — **ตัดสินใจแล้ว (2026-08-07): ตัดตัวเลือก `OTHER` (อื่นๆ) ทิ้ง** และ **label ใช้ `thai_name` เต็มรูปแบบ** (เช่น "ธนาคารกสิกรไทย" ไม่ใช่ "กสิกรไทย")
-  - ตรวจ: `npm run build` ผ่าน + push (web `master`)
+  - แก้ `src/features/register/register-form.tsx` → render `SelectItem` จาก banks.ts แบบ loop — **ตัด OTHER ทิ้ง, label ใช้ชื่อเต็ม** (ตามที่ user ยืนยัน)
+  - ครอบคลุม list เดิมครบทุกตัว + มีธนาคารเพิ่มอีกเพียบ (UOB, TISCO, KK, ICBC, TBANK ฯลฯ)
+  - ตรวจ: `npm run build` ผ่าน + push (web `master` `710413fe`) — lint 18 problems เป็น pre-existing
 
 ---
 
