@@ -329,6 +329,17 @@ created: 2026-07-21
   - Frontend (web): หน้า customer detail แสดง "พืชที่ปลูก" (ถ้ามีค่า — ถ้าไม่มีไม่ต้องแสดง/hide)
   - ตรวจ: tsc/build ผ่านทั้ง 2 repo + push (api `main`, web `master`)
 
+### Register — Bank List จาก banks.json 🏦
+
+> เพิ่ม 2026-08-07 — ใช้ list ธนาคารจริงจาก https://github.com/AomDEV/css-finances/blob/main/banks.json (โหลดมาไว้ใน repo เรา) — **key (uppercase) = value, `thai_name` = label**
+
+- [ ] **T147** 🟡 Frontend (web): เปลี่ยน bank list ในหน้าสมัครสมาชิกจาก hardcode → ใช้ banks.json
+  - ดาวน์โหลด `banks.json` (จาก AomDEV/css-finances — มี **34 ธนาคาร**: BBL, KBANK, KTB, SCB, BAY, TTB, GSB, BAAC, UOB, TISCO, KK, ICBC, TBANK ฯลฯ) → เก็บใน repo web เช่น `src/data/banks.json` (หรือ `public/banks.json`) แล้ว commit ขึ้น GitHub เรา
+  - ใช้ key **uppercase** เป็น value (เช่น `KBANK`, `SCB`) และ **`thai_name`** เป็น label (เช่น "ธนาคารกสิกรไทย")
+  - แก้ `src/features/register/register-form.tsx` (ตอนนี้ hardcode 8 ตัว + OTHER ที่บรรทัด ~303-311) → render `SelectItem` จาก banks.json แบบ loop
+  - ครอบคลุม list เดิมครบทุกตัว (KBANK/KTB/BBL/SCB/BAY/TTB/GSB/BAAC) — เพิ่มเติม: ตัดสินใจเรื่องตัวเลือก `OTHER` (อื่นๆ) — banks.json ไม่มี → จะเก็บต่อท้ายไว้ไหม หรือตัดทิ้ง (ถาม user)
+  - ตรวจ: `npm run build` ผ่าน + push (web `master`)
+
 ---
 
 ## 📦 S6: Deploy (1 วัน)
