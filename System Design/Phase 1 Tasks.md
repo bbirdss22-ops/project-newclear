@@ -301,6 +301,14 @@ created: 2026-07-21
 - [ ] **T140** 🔴 Backend: เบอร์มือถือห้ามซ้ำ — เพิ่ม unique constraint บน `phone` (Prisma migration) + ตรวจซ้ำใน `CreateCustomerDto`/`CustomerService.createCustomer()` → ตอบ 409 พร้อม error message ชัดเจน; Frontend แสดง error ที่ field เบอร์โทร (ไม่ใช่ generic)
 - [ ] **T141** 🟡 Frontend: เพิ่มข้อความใต้ field ที่อยู่ (helper text) — "ที่อยู่และเบอร์โทรนี้จะใช้ในการจัดส่งสินค้า" เพื่อให้ลูกค้ารู้ว่าจะใช้ข้อมูลนี้จัดส่ง (register form)
 
+### Gift Flow — แจกของสมนาคุณ 🎁
+
+> Flow: สมัคร → ได้รหัส NC0000x → LINE แจ้ง + ลิงก์ Google Form → ลูกค้ากรอก (รหัส + พืชที่ปลูก) → บริษัทจัดส่งของตามที่อยู่/เบอร์ที่สมัคร (ดู [[2026-08-07-register-gift-flow]])
+
+- [ ] **T142** 🔴 Backend: LINE push หลังสมัครสำเร็จ — เพิ่มลิงก์ Google Form ในข้อความ (ถัดจากรหัสสมาชิก) — config `GIFT_FORM_URL` ใน env
+- [ ] **T143** 🟡 (ตัดสินใจ) ข้อมูลจาก Google Form อยู่นอกระบบ — บริษัท export เอง หรือสร้างฟอร์มในแอปเพื่อเก็บ `registered plants` เข้า DB
+- [ ] **T144** 🟢 (ตัดสินใจ) สถานะส่งของ (ส่งแล้ว/ยัง) — ต้องมี tracking ไหม (รู้ว่าใครยังไม่ได้ของ)
+
 ---
 
 ## 📦 S6: Deploy (1 วัน)
