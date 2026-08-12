@@ -9,6 +9,22 @@
 
 ---
 
+## ⚠️ Note: ใช้ referrerCode แทน referrerId
+
+**Decision:** เปลี่ยนจาก `referrerId` (UUID) → `referrerCode` (customer code เช่น NC-001)
+
+**เหตุผล:**
+- URL สั้นลง: `/register?referrerCode=NC-001` vs `/register?referrerId=abc123-def456...`
+- อ่านง่าย จดจำง่าย
+- User-friendly มากขึ้น
+
+**Implementation:** 
+- API รับ `referrerCode` (string) → lookup customer by code → ใช้ id สำหรับ FK
+- ไม่ต้อง migrate schema (field `referrer_id` ใน DB ยังคงเดิม)
+- **Status:** 📝 Designed — ยังไม่ implement code
+
+---
+
 ## ✅ สิ่งที่มีพร้อมแล้ว (จาก Schema ปัจจุบัน)
 
 ```prisma
@@ -302,7 +318,7 @@ const searchSchema = z.object({
 
 Backend จะ lookup customer by `referrerCode` → ได้ `referrerId` (UUID) → เก็บเป็น FK ✅
 
-**Optional Enhancement:** แสดงข้อความ "🎫 แนะนำโดย [referrer name]" เมื่อมี `referrerId` ใน URL
+**Optional Enhancement:** แสดงข้อความ "🎫 แนะนำโดย [referrer name]" เมื่อมี `referrerCode` ใน URL
 
 ### 4. Binary Tree Auto-Placement Algorithm
 
@@ -385,7 +401,7 @@ findPlacement(referrerId):
 ## 📌 หมายเหตุ
 
 - รอ LINE Platform Outage (status.line-platform.com) หายก่อนถึงทดสอบ LINE flow ได้
-- Frontend register page เปิด `?referrerId=` ได้แล้ว — ทดสอบผ่าน browser ได้เลย
+- Frontend register page เปิด `?referrerCode=` ได้แล้ว — ทดสอบผ่าน browser ได้เลย
 - Customer schema มี `referrerId` พร้อมแล้ว — ไม่ต้อง migrate DB เพิ่มสำหรับ referral
 - **ต้อง migrate DB สำหรับ unique constraints** (phone, email, idCardNumber)
 - แนะนำให้ **บังคับกรอกเบอร์โทรศัพท์** ตอนสมัครเพื่อ identity anchor ที่แน่นอน
