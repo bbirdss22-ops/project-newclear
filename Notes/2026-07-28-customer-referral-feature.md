@@ -2,8 +2,10 @@
 
 **Feature:** ลูกค้าส่งลิงก์แนะนำเพื่อนสมัครสมาชิก → ได้ commission จากยอดขายของเพื่อน (MLM)
 
-**Date:** 2026-07-28 (Updated: 2026-07-29)  
+**Date:** 2026-07-28 (Updated: 2026-08-12)  
 **Status:** 📝 Designed — pending implementation
+
+> **⚠️ Design Decision (2026-08-12):** เปลี่ยนจากใช้ `referrerId` (UUID) → ใช้ `referrerCode` (customer code เช่น NC00001) ใน URL และ API เพื่อให้ URL สั้น อ่านง่าย แต่ DB schema ยังคงเก็บ `referrerId` (UUID) เป็น FK เดิม
 
 ---
 
@@ -40,11 +42,11 @@ LINE Postback → action=referral
   ▼
 Backend LINE Controller:
   ├── หา Customer record จาก lineUserId
-  ├── สร้าง Referral Link:
-  │   https://project-nuclear-web.vercel.app/register?referrerId={customer.id}
+  ├── สร้าง Referral Link (ใช้ customer code):
+  │   https://project-nuclear-web.vercel.app/register?referrerCode={customer.code}
   └── Reply LINE:
       "🎯 ลิงก์แนะนำเพื่อนของคุณ:
-       https://...register?referrerId=...
+       https://...register?referrerCode=...
        
        แชร์ลิงก์นี้ให้เพื่อน!
        เมื่อเพื่อนสมัครและสั่งซื้อ → คุณได้รับ Commission"
@@ -53,18 +55,19 @@ Backend LINE Controller:
   ▼
 Customer B เปิดลิงก์ → หน้า Register
   │   ข้อความ: "🎫 แนะนำโดย: Customer A"
-  │   referrerId ถูก pass ไปใน URL
+  │   referrerCode ถูก pass ไปใน URL
   ▼
 Customer B กรอกข้อมูล → Submit
   │
   ▼
-POST /api/customers { referrerId: A.id, ... }
+POST /api/customers { referrerCode: "NC00001", ... }
   │
   ▼
 Backend:
+  ├── Lookup customer by referrerCode → ได้ referrerId (UUID)
   ├── 🆕 L1-L4: Identity dedup check (phone/email/idCard/lineUserId)
   ├── └─ เจอ match → ❌ 409 Conflict
-  ├── ├─ ไม่เจอ → สร้าง Customer B (referrerId = A.id)
+  ├── ├─ ไม่เจอ → สร้าง Customer B (referrerId = lookup result)
   ├── Auto-place ใน Binary Tree (side ที่ volume น้อย)
   └── ✅ Response success
 ```
@@ -273,7 +276,7 @@ case 'referral':
     reply: "⚠️ กรุณาสมัครสมาชิกก่อนใช้ฟีเจอร์แนะนำเพื่อน"
     return;
   }
-  const referralUrl = `https://project-nuclear-web.vercel.app/register?referrerId=${customer.id}`;
+  const referralUrl = `https://project-nuclear-web.vercel.app/register?referrerCode=${customer.code}`;
   reply: `🎯 ลิงก์แนะนำเพื่อนของคุณ:\n${referralUrl}\n\nแชร์ลิงก์นี้ให้เพื่อน!\nเมื่อเพื่อนสมัครและซื้อสินค้า → คุณได้รับ Commission`
 ```
 
@@ -281,23 +284,23 @@ case 'referral':
 
 | Method | Endpoint | Status |
 |--------|----------|--------|
-| `POST` | `/api/customers` | ✅ มีแล้ว — รองรับ `referrerId` + Identity dedup 🆕 |
+| `POST` | `/api/customers` | ✅ มีแล้ว — ต้องแก้ให้รับ `referrerCode` แทน `referrerId` (lookup code → id) |
 | `POST` | `/api/customers/me/referral-link` | 📝 ต้องสร้าง (Auth) |
 | `POST` | `/api/commissions/calculate` | 📝 ต้องสร้าง |
 | `GET` | `/api/customers/me/referrals` | 📝 ดูรายชื่อคนที่ชวนมา |
 
 ### 3. Frontend Register Page
 
-ปัจจุบันหน้า `/register` รองรับ `referrerId` อยู่แล้วผ่าน URL params:
+ปัจจุบันหน้า `/register` รองรับ `referrerCode` ผ่าน URL params (แทน `referrerId`):
 ```tsx
 const searchSchema = z.object({
   lineUserId: z.string().optional(),
-  referrerId: z.string().optional(),   // ✅ พร้อม
+  referrerCode: z.string().optional(),   // ✅ ใช้ customer code แทน UUID
   token: z.string().optional(),
 })
 ```
 
-Form ส่ง `referrerId` ไปกับ `createCustomer` API → ลง DB อัตโนมัติ ✅
+Backend จะ lookup customer by `referrerCode` → ได้ `referrerId` (UUID) → เก็บเป็น FK ✅
 
 **Optional Enhancement:** แสดงข้อความ "🎫 แนะนำโดย [referrer name]" เมื่อมี `referrerId` ใน URL
 
@@ -343,7 +346,7 @@ findPlacement(referrerId):
 | 2 | สร้าง `CustomerService.getReferralLink(customerId)` | `customer.service.ts` | 🔴 High |
 | 3 | Reply LINE → referral link + invite text | `line.service.ts` | 🔴 High |
 | 4 | เพิ่มปุ่ม "🎯 แนะนำเพื่อน" ใน Rich Menu | LINE Dev Console | 🔴 High |
-| 5 | Frontend: แสดง "แนะนำโดย" เมื่อมี `referrerId` | `register/index.tsx` | 🟡 Med |
+| 5 | Frontend: เปลี่ยนจาก `referrerId` → `referrerCode` ใน URL + แสดง "แนะนำโดย" | `register/index.tsx` | 🟡 Med |
 | 6 | Binary Tree Auto-Placement Algorithm | `customer.service.ts` | 🟡 Med |
 | 7 | Commission Calculation เมื่อ order paid | `commission.service.ts` | 🟡 Med |
 | 8 | API: `GET /api/customers/me/referrals` | `customer.controller.ts` | 🟡 Med |
@@ -367,6 +370,15 @@ findPlacement(referrerId):
 
 **แนะนำ:** เริ่มด้วย UUID ก่อน → optimize ทีหลัง  
 **แนะนำ:** Unique constraint + OR query ก่อน → Fuzzy check phase ทีหลัง
+
+> **📝 Design Update (2026-08-12):**  
+> เปลี่ยนจากใช้ `referrerId` (UUID) → ใช้ `referrerCode` (customer code) ใน URL และ API  
+> **เหตุผล:** URL สั้นลง อ่านง่าย  
+> **Implementation:**  
+> - URL: `/register?referrerCode=NC00001` (แทน `/register?referrerId=abc123-def456...`)  
+> - API: รับ `referrerCode` → lookup customer → ใช้ `referrerId` (UUID) เป็น FK  
+> - DB Schema: ไม่ต้องแก้ (ยังคง `referrer_id` UUID)  
+> - **Status:** 📝 Designed — ยังไม่ implement
 
 ---
 
