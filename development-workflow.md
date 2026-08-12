@@ -18,30 +18,32 @@
 
 ---
 
-## 🏗️ Architecture: 2 Environments
+## 🏗️ Architecture: 2 Environments (Cloud-Based)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    DEVELOPMENT                          │
+│                    DEVELOPMENT (Cloud)                  │
 ├─────────────────────────────────────────────────────────┤
-│  API:    localhost:3000 (or Render dev branch)         │
-│  Web:    localhost:5173 (Vite dev server)              │
+│  API:    dev-project-newclear-api.onrender.com         │
+│  Web:    dev-project-nuclear-web.vercel.app            │
 │  DB:     Neon dev branch (separate database)           │
-│  LINE:   Test channel (or webhook proxy)               │
+│  LINE:   Test channel (webhook → dev API cloud URL)    │
 │  Seed:   Test data, mock customers, test orders        │
+│  Branch: `dev` branch → auto-deploy to dev env         │
 └─────────────────────────────────────────────────────────┘
                           │
                      git push main
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────┐
-│                    PRODUCTION                            │
+│                    PRODUCTION (Cloud)                    │
 ├─────────────────────────────────────────────────────────┤
 │  API:    project-newclear-api.onrender.com             │
 │  Web:    project-nuclear-web.vercel.app                │
 │  DB:     Neon production (real data)                   │
 │  LINE:   Production channel (real LINE OA)             │
 │  Data:   Real customers, real orders                   │
+│  Branch: `main` branch → auto-deploy to prod env       │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -51,7 +53,7 @@
 
 ### API (`project-newclear-api`)
 
-**`.env.development`** (local dev):
+**`.env.development`** (Render dev service):
 ```bash
 # Database (Neon dev branch)
 DATABASE_URL=postgresql://...@dev-db.neon.tech/newclear-dev
@@ -60,8 +62,8 @@ DATABASE_URL=postgresql://...@dev-db.neon.tech/newclear-dev
 LINE_CHANNEL_ACCESS_TOKEN=dev-token
 LINE_CHANNEL_SECRET=dev-secret
 
-# Frontend URL (local dev)
-FRONTEND_URL=http://localhost:5173
+# Frontend URL (dev cloud)
+FRONTEND_URL=https://dev-project-nuclear-web.vercel.app
 
 # Activity image (dev)
 ACTIVITY_IMAGE_URL=https://via.placeholder.com/600x400?text=Dev+Activity
@@ -85,9 +87,9 @@ ACTIVITY_IMAGE_URL=https://real-image-url.com/activity.jpg
 
 ### Web (`project-nuclear-web`)
 
-**`.env.development`** (local dev):
+**`.env.development`** (Vercel dev):
 ```bash
-VITE_API_BASE_URL=http://localhost:3000/api
+VITE_API_BASE_URL=https://dev-project-newclear-api.onrender.com/api
 ```
 
 **`.env.production`** (Vercel):
@@ -211,49 +213,35 @@ main().catch(console.error);
 
 ---
 
-## 🔄 CI/CD Pipeline
+## 🔄 CI/CD Pipeline (Cloud-Based)
 
-### GitHub Actions (Recommended)
+### Render Setup
 
-**`.github/workflows/dev-deploy.yml`**:
-```yaml
-name: Deploy to Development
+**Production Service:**
+- Service name: `project-newclear-api`
+- Branch: `main`
+- Auto-deploy: ✅
+- Environment: `.env.production`
 
-on:
-  push:
-    branches: [dev]
+**Dev Service:**
+- Service name: `dev-project-newclear-api`
+- Branch: `dev`
+- Auto-deploy: ✅
+- Environment: `.env.development`
 
-jobs:
-  deploy-api:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
-      
-      # Deploy to Render (dev branch)
-      - name: Deploy to Render (dev)
-        run: |
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_DEV }}
+### Vercel Setup
 
-  deploy-web:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm run build
-      - run: npm run test:e2e
-      
-      # Vercel auto-deploys on push to dev
-      # Just verify build passes
-```
+**Production:**
+- Project: `project-nuclear-web`
+- Branch: `main`
+- Auto-deploy: ✅
+- Environment: Production
+
+**Dev:**
+- Project: `dev-project-nuclear-web` (or preview deployments)
+- Branch: `dev`
+- Auto-deploy: ✅
+- Environment: Preview/Development
 
 **`.github/workflows/prod-deploy.yml`**:
 ```yaml
@@ -297,49 +285,37 @@ jobs:
 
 ## 🧪 Testing Strategy
 
-### Local Development Workflow
+### Development Workflow (Cloud-Based)
 
 ```bash
 # 1. Clone repos
 git clone https://github.com/bbirdss22-ops/project-newclear-api.git
 git clone https://github.com/bbirdss22-ops/project-nuclear-web.git
 
-# 2. Switch to dev branch
+# 2. Create feature branch
 cd project-newclear-api
-git checkout dev
+git checkout -b feature/referral-system
 
-# 3. Install dependencies
-npm install
-
-# 4. Setup dev database
-npx prisma migrate dev
-npm run seed  # Load test data
-
-# 5. Start dev servers
-# Terminal 1: API
-npm run start:dev  # http://localhost:3000
-
-# Terminal 2: Web
-cd ../project-nuclear-web
-npm run dev  # http://localhost:5173
-
-# 6. Test locally
-# Open http://localhost:5173
-# Test registration, LINE webhook, etc.
-
-# 7. When done, commit + push
+# 3. Make changes, commit, push
 git add .
 git commit -m "feat: add referral system"
-git push origin dev  # Auto-deploy to dev environment
+git push origin feature/referral-system
 
-# 8. Test on dev environment
+# 4. Merge to dev branch (via PR or direct merge)
+git checkout dev
+git merge feature/referral-system
+git push origin dev
+# → Auto-deploy to dev cloud environment
+
+# 5. Test on dev cloud
 # https://dev-project-nuclear-web.vercel.app
 # https://dev-project-newclear-api.onrender.com
 
-# 9. If all good, merge to main
+# 6. If all good, merge to main
 git checkout main
 git merge dev
-git push origin main  # Auto-deploy to production
+git push origin main
+# → Auto-deploy to production
 ```
 
 ### Testing Checklist
@@ -357,27 +333,13 @@ git push origin main  # Auto-deploy to production
 
 ## 🔐 LINE Integration
 
-### Development (Test Channel)
+### Development (Test Channel + Cloud)
 
-สร้าง LINE test channel แยก:
-1. ไปที่ [LINE Developers Console](https://developers.line.biz/)
-2. Create new provider: "Newclear Dev"
-3. Create Messaging API (test channel)
-4. ใช้ channel access token ของ test channel ใน `.env.development`
+1. สร้าง LINE test channel ที่ [LINE Developers Console](https://developers.line.biz/)
+2. Set webhook URL: `https://dev-project-newclear-api.onrender.com/webhook`
+3. ใช้ channel access token ของ test channel ใน `.env.development`
 
-### Testing LINE Webhook Locally
-
-ใช้ **ngrok** เพื่อ expose local server:
-```bash
-# Install ngrok
-npm install -g ngrok
-
-# Expose local API
-ngrok http 3000
-
-# Copy URL: https://abc123.ngrok.io
-# Set as webhook URL in LINE test channel
-```
+**ข้อดี:** ไม่ต้องใช้ ngrok — dev API เป็น cloud URL แล้ว
 
 ### Production (Real Channel)
 
@@ -391,12 +353,14 @@ ngrok http 3000
 
 | Aspect | Development | Production |
 |--------|-------------|------------|
-| **API URL** | `localhost:3000` or `dev-*.onrender.com` | `project-newclear-api.onrender.com` |
-| **Web URL** | `localhost:5173` or `dev-*.vercel.app` | `project-nuclear-web.vercel.app` |
+| **API URL** | `dev-project-newclear-api.onrender.com` | `project-newclear-api.onrender.com` |
+| **Web URL** | `dev-project-nuclear-web.vercel.app` | `project-nuclear-web.vercel.app` |
 | **Database** | Neon dev branch (test data) | Neon production (real data) |
 | **LINE Channel** | Test channel | Production LINE OA |
+| **Webhook URL** | `https://dev-.../webhook` (cloud) | `https://prod-.../webhook` (cloud) |
 | **Data** | Seed data, mock customers | Real customers, real orders |
 | **Deploy** | Auto on push to `dev` | Auto on push to `main` |
+| **Access** | Public URL (cloud) | Public URL (cloud) |
 | **Risk** | Safe to experiment | ⚠️ Real money, real users |
 
 ---
@@ -438,23 +402,25 @@ ngrok http 3000
 ## 💡 Tips & Best Practices
 
 1. **Never work directly on `main`** — always use `dev` or feature branches
-2. **Test on dev before merging to main** — catch bugs early
+2. **Test on dev cloud before merging to main** — catch bugs in cloud environment
 3. **Use seed data** — don't test with real customer data
 4. **Keep .env files out of git** — use `.env.example` as template
 5. **Document environment setup** — make it easy for new developers
 6. **Use feature flags** — test new features without affecting production
 7. **Monitor production** — set up alerts for errors, downtime
+8. **Dev = Production-like** — same cloud infrastructure, just different data
 
 ---
 
 ## 🔮 Future Enhancements
 
-- **Staging environment** — mirror of production for final testing
+- **Staging environment** — mirror of production for final testing (pre-prod)
 - **Database snapshots** — copy production data to dev (anonymized)
 - **Automated testing** — run tests on every PR
-- **Preview deployments** — Vercel preview for each PR
+- **Preview deployments** — Vercel preview for each PR (already supported)
 - **Feature flags** — toggle features on/off without deploy
 - **Monitoring dashboard** — Grafana/Datadog for production metrics
+- **Local dev fallback** — optional localhost setup for offline work
 
 ---
 
