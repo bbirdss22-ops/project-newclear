@@ -472,10 +472,16 @@ git push origin main
 - Verify: customers=2, users=1
 
 **ยังไม่ได้ push (ค้างใน local)**
-- `prisma/seed.ts` (แก้ adapter + password)
-- `prisma.config.ts` (seed command)
-- `.gitignore` (เพิ่ม env)
-- `package.json` (tsx devDep)
+- ~~`prisma/seed.ts`~~ ✅ push แล้ว (`803f3fe`)
+- ~~`prisma.config.ts`~~ ✅
+- ~~`.gitignore`~~ ✅
+- ~~`package.json`~~ ✅ (+package-lock.json) — รวม 5 ไฟล์ push dev แล้ว
+
+## 2026-08-24 — Phase 1 cleanup
+
+- **Push 5 ไฟล์ค้างขึ้น dev แล้ว** (commit `803f3fe`): seed.ts + prisma.config.ts + .gitignore + package.json + package-lock.json — API repo สะอาด
+- **gh token ถูก revive** (ก่อนหน้า push fail: "Invalid username or token" → re-auth `gh auth login` --with-token → verified repo+workflow scope → `gh auth setup-git` → push ผ่าน)
+- ⚠️ token เก่า (ghp_YX...VpRE) expired — ตอนนี้ใช้ตัวใหม่แล้ว
 
 ### ⬜ เหลือทำ
 
