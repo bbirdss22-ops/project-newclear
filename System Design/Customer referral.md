@@ -341,13 +341,25 @@ findPlacement(referrerId):
 
 ### 5. Commission Flow
 
+> **🆕 **Design Update (2026-08-30):** เปลี่ยนจาก % → **flat เงินต่อชิ้น (per-unit)**
+> 1st level upline = 10 บาท/ชิ้น · 2nd level upline = 1 บาท/ชิ้น · จ่ายแค่ 2 level บน
+
 ```
 เมื่อ order.status → "paid":
-  ┌─ Direct Commission: order.total × config.percentage (1 level)
-  ├─ Binary Commission: min(left_vol, right_vol) × config.percentage
-  └─ Upline Commission: recursive ขึ้นไป n levels
-     → จาก CommissionConfig model
+  สำหรับทุก line item (ชิ้น) ใน order:
+  ├─ 1st level upline (คนที่ชวนคนซื้อ)  → +10 บาท/ชิ้น
+  ├─ 2nd level upline (ชวนคนที่ชวน)     → +1 บาท/ชิ้น
+  └─ level 3+ ขึ้นไป                    → 0 (หยุดแค่ 2 level)
 ```
+
+**ตัวอย่าง:** เบนซ์ (ชวนโดย ช) ซื้อ 3 ชิ้น → ช (1st) ได้ 30 บาท, ชช (2nd) ได้ 3 บาท
+
+**Schema:** `CommissionConfig` ใช้ `type="flat"` + `level` (1/2) + เก็บเงินต่อชิ้น (10/1) — ใช้ field `commissionValue`/เพิ่ม `flatAmount` แทน `percentage` (ไม่ migrate ใหญ่)
+
+**หมายเหตุ:**
+- "ชิ้น" = ต่อ line item ปกติ เท่ากันทุก product
+- คำนวณตอน order paid → คนกลาง ?ref ของคนขายที่มา = 1st, คนชวนคนนั้น = 2nd
+- Refund/return → ควรหัก commission คืนอัตโนมัติ (ยังต้องยืนยัน)
 
 ---
 
