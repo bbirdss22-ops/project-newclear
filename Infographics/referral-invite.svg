@@ -1,42 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
-  <rect width="1080" height="1920" fill="#e8f5e9"/>
+  <rect width="1080" height="1920" fill="#F0F0F0"/>
 
   <!-- Header -->
-  <text x="540" y="160" font-family="Loma,sans-serif" font-size="72" font-weight="bold" fill="#1a2a6c" text-anchor="middle">🌱 แค่แชร์ลิงก์</text>
-  <text x="540" y="250" font-family="Loma,sans-serif" font-size="52" fill="#1e7d44" text-anchor="middle">ก็เริ่มเก็บรายได้ได้แล้ว</text>
+  <text x="540" y="160" font-family="Loma,sans-serif" font-size="72" font-weight="bold" fill="#00503C" text-anchor="middle">🌱 แค่แชร์ลิงก์</text>
+  <text x="540" y="250" font-family="Loma,sans-serif" font-size="52" fill="#4A8000" text-anchor="middle">ก็เริ่มเก็บรายได้ได้แล้ว</text>
 
   <!-- Step 1 -->
-  <rect x="90" y="360" width="900" height="230" rx="30" fill="#c8e6c9" stroke="#1e7d44" stroke-width="3"/>
-  <circle cx="190" cy="475" r="62" fill="#1e7d44"/>
+  <rect x="90" y="360" width="900" height="230" rx="30" fill="#DDE8C8" stroke="#4A8000" stroke-width="3"/>
+  <circle cx="190" cy="475" r="62" fill="#4A8000"/>
   <text x="190" y="505" font-family="Loma,sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
-  <text x="300" y="450" font-family="Loma,sans-serif" font-size="50" font-weight="bold" fill="#1a2a6c">กดปุ่ม “แนะนำเพื่อน”</text>
+  <text x="300" y="450" font-family="Loma,sans-serif" font-size="50" font-weight="bold" fill="#00503C">กดปุ่ม “แนะนำเพื่อน”</text>
   <text x="300" y="520" font-family="Loma,sans-serif" font-size="36" fill="#5d4037">ใน LINE แค่แตะปุ่มเดียว 🌟</text>
 
   <!-- arrow -->
-  <text x="540" y="665" font-family="Loma,sans-serif" font-size="60" fill="#7cb342" text-anchor="middle">↓</text>
+  <text x="540" y="665" font-family="Loma,sans-serif" font-size="60" fill="#7CB342" text-anchor="middle">↓</text>
 
   <!-- Step 2 -->
-  <rect x="90" y="710" width="900" height="230" rx="30" fill="#fff3c4" stroke="#f9a825" stroke-width="3"/>
-  <circle cx="190" cy="825" r="62" fill="#f9a825"/>
+  <rect x="90" y="710" width="900" height="230" rx="30" fill="#FFF2D9" stroke="#F5A800" stroke-width="3"/>
+  <circle cx="190" cy="825" r="62" fill="#F5A800"/>
   <text x="190" y="855" font-family="Loma,sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle">2</text>
-  <text x="300" y="800" font-family="Loma,sans-serif" font-size="50" font-weight="bold" fill="#1a2a6c">ได้ลิงก์ส่วนตัว</text>
+  <text x="300" y="800" font-family="Loma,sans-serif" font-size="50" font-weight="bold" fill="#00503C">ได้ลิงก์ส่วนตัว</text>
   <text x="300" y="870" font-family="Loma,sans-serif" font-size="36" fill="#5d4037">ระบบสร้างลิงก์ของคุณเอง</text>
 
   <!-- arrow -->
-  <text x="540" y="1015" font-family="Loma,sans-serif" font-size="60" fill="#7cb342" text-anchor="middle">↓</text>
+  <text x="540" y="1015" font-family="Loma,sans-serif" font-size="60" fill="#7CB342" text-anchor="middle">↓</text>
 
   <!-- Step 3 -->
-  <rect x="90" y="1060" width="900" height="230" rx="30" fill="#bbdefb" stroke="#1a2a6c" stroke-width="3"/>
-  <circle cx="190" cy="1175" r="62" fill="#1a2a6c"/>
+  <rect x="90" y="1060" width="900" height="230" rx="30" fill="#DBE9E4" stroke="#00503C" stroke-width="3"/>
+  <circle cx="190" cy="1175" r="62" fill="#00503C"/>
   <text x="190" y="1205" font-family="Loma,sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle">3</text>
-  <text x="300" y="1150" font-family="Loma,sans-serif" font-size="50" font-weight="bold" fill="#1a2a6c">แชร์ให้เพื่อน</text>
+  <text x="300" y="1150" font-family="Loma,sans-serif" font-size="50" font-weight="bold" fill="#00503C">แชร์ให้เพื่อน</text>
   <text x="300" y="1220" font-family="Loma,sans-serif" font-size="36" fill="#5d4037">ส่งให้เพื่อนผ่าน LINE / โซเชียล</text>
 
   <!-- closing box -->
-  <rect x="150" y="1400" width="780" height="200" rx="25" fill="#ffffff" stroke="#1e7d44" stroke-width="3"/>
-  <text x="540" y="1480" font-family="Loma,sans-serif" font-size="34" fill="#1e7d44" text-anchor="middle">เพื่อนสมัครผ่านลิงก์คุณ</text>
-  <text x="540" y="1540" font-family="Loma,sans-serif" font-size="44" font-weight="bold" fill="#f9a825" text-anchor="middle">ระบบเชื่อมต่อให้เอง ✅</text>
+  <rect x="150" y="1400" width="780" height="200" rx="25" fill="#ffffff" stroke="#4A8000" stroke-width="3"/>
+  <text x="540" y="1480" font-family="Loma,sans-serif" font-size="34" fill="#4A8000" text-anchor="middle">เพื่อนสมัครผ่านลิงก์คุณ</text>
+  <text x="540" y="1540" font-family="Loma,sans-serif" font-size="44" font-weight="bold" fill="#F5A800" text-anchor="middle">ระบบเชื่อมต่อให้เอง ✅</text>
 
   <!-- footer -->
-  <text x="540" y="1780" font-family="Loma,sans-serif" font-size="30" fill="#1a2a6c" text-anchor="middle">กด → ได้ลิงก์ → แชร์ · จบใน 10 วินาที</text>
+  <text x="540" y="1780" font-family="Loma,sans-serif" font-size="30" fill="#00503C" text-anchor="middle">กด → ได้ลิงก์ → แชร์ · จบใน 10 วินาที</text>
 </svg>
