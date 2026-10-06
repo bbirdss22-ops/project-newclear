@@ -486,16 +486,28 @@ git push origin main
 ### ⬜ เหลือทำ
 
 **ต้อง external access (ทำเอง)**
-1. **LINE test channel** → LINE Developers Console → secret + access token → ใส่ `.env.development`
-2. **Render dev service** `dev-project-newclear-api` → branch `dev` + env จาก `.env.development`
+1. ~~LINE test channel~~ ✅ **เสร็จแล้ว (ดูด้านล่าง 2026-10-06)**
+2. ~~Render dev service~~ ✅ **dev-project-newclear-api บน Render live**
 3. **Vercel dev** → เชื่อม branch `dev`
 
 **รอ agent ทำ (เมื่อมีค่า)**
-4. Push seed.ts + prisma.config.ts + .gitignore + package.json ขึ้น dev
-5. GitHub secrets: `RENDER_DEPLOY_HOOK_DEV`, `RENDER_DEPLOY_HOOK_PROD`, `DATABASE_URL_PROD`
+4. ~~Push seed.ts + prisma.config.ts + .gitignore + package.json ขึ้น dev~~ ✅ (ดูด้านบน)
+5. GitHub secrets: ~~`RENDER_DEPLOY_HOOK_DEV`~~ ✅, `RENDER_DEPLOY_HOOK_PROD`, `DATABASE_URL_PROD`
 6. ทดสอบ pipeline dev → main
 
 ### 📌 หมายเหตุ
 - dev-deploy workflow ยังไม่มี CI check จริงใน main protection (contexts ว่าง) — optional เพิ่มทีหลัง
 - seed admin password เป็นค่า placeholder (`change-me-in-prod`) — ต้องเปลี่ยนก่อนใช้จริง
 - sslmode warning ตอน seed (`sslmode=require` → libpq ใหม่) — ไม่มีผลกับ Prisma
+
+## 2026-10-06 — LINE 2-channel + Render dev deploy เสร็จ
+
+- **LINE แยก dev/prod 2 channel** (commit API `97a10da`):
+  - โค้ดอ่าน env ตาม NODE_ENV: dev→`*_DEV`, prod→`*_PROD`, fallback base
+  - 3 จุดแก้: `line-signature.guard.ts` (secret) + `line.service.ts` (helper `lineAccessToken()`)
+  - tsc passed exit 0
+- **Channels verify** (LINE API `/v2/bot/info` 200): DEV `DEV เกษตรนิวเคลียร์` @942ysdea · PROD `เกษตรนิวเคลียร์☘️` @793kiebo
+- **Render dev service live**: `dev-project-newclear-api.onrender.com` — `/api/health` 200
+- **GitHub secret** `RENDER_DEPLOY_HOOK_DEV` ตั้งแล้ว (push dev → auto-deploy)
+- **Webhook E2E ✓**: ส่งข้อความใน LINE dev → app ตอบกลับได้จริง (signature guard ปฏิเสธ no/bogus sig → 401)
+- ⚠️ SECURITY: tokens/secret ผ่านแชท — แนะนำ re-issue ก่อน go-live prod
